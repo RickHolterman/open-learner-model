@@ -11,14 +11,16 @@
     "test": "tests"
   },
   "scripts": {
-    "build": "ember build --environment=production",
+    "build": "npx tailwindcss -i ./app/styles/app.css -o ./public/tailwind.css && ember build --environment=production",
     "lint": "npm-run-all --aggregate-output --continue-on-error --parallel \"lint:!(fix)\"",
     "lint:fix": "npm-run-all --aggregate-output --continue-on-error --parallel lint:*:fix",
     "lint:hbs": "ember-template-lint .",
     "lint:hbs:fix": "ember-template-lint . --fix",
     "lint:js": "eslint . --cache",
     "lint:js:fix": "eslint . --fix",
-    "start": "ember serve",
+    "start": "npm-run-all --continue-on-error --parallel \"start:tailwind\" \"start:ember\"",
+    "start:ember": "ember serve",
+    "start:tailwind": "npx tailwindcss -i ./app/styles/app.css -o ./public/tailwind.css --watch",
     "test": "npm-run-all lint test:*",
     "test:ember": "ember test"
   },
@@ -29,7 +31,7 @@
     "@glimmer/tracking": "^1.0.4",
     "babel-eslint": "^10.1.0",
     "broccoli-asset-rev": "^3.0.0",
-    "ember-auto-import": "^1.11.3",
+    "ember-auto-import": "^2.4.2",
     "ember-cli": "~3.28.4",
     "ember-cli-app-version": "^5.0.0",
     "ember-cli-babel": "^7.26.6",
@@ -59,12 +61,15 @@
     "npm-run-all": "^4.1.5",
     "prettier": "^2.3.2",
     "qunit": "^2.16.0",
-    "qunit-dom": "^1.6.0"
+    "qunit-dom": "^1.6.0",
+    "tailwindcss": "^3.1.8",
+    "webpack": "^5.74.0"
   },
   "engines": {
     "node": "12.* || 14.* || >= 16"
   },
   "ember": {
     "edition": "octane"
-  }
+  },
+  "dependencies": {}
 }
