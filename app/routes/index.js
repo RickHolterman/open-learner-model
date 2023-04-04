@@ -33,7 +33,7 @@ const GRID_MOCK = {
         group: 50,
       },
       buggyAnswers: {
-        personal: 4,
+        personal: 5,
       },
     },
     {

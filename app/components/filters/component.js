@@ -59,6 +59,15 @@ export default class FiltersComponent extends Component {
     return this.args.toggleGroupProgressActive();
   }
 
+  @action
+  toggleBuggyAnswersActive() {
+    if (isEmpty(this.args.toggleBuggyAnswersActive) === true) {
+      return;
+    }
+
+    return this.args.toggleBuggyAnswersActive();
+  }
+
   sortOptions = [
     { value: SORT_TYPE.PERSONAL_ASC, label: 'Personal progress - ascending' },
     { value: SORT_TYPE.PERSONAL_DESC, label: 'Personal progress - descending' },

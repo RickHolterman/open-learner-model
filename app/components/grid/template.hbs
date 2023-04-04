@@ -1,9 +1,13 @@
-<div data-component-name='grid' {{did-insert this.setupTooltips}} class='mb-5'>
-  <div class='flex flex-row gap-1 mt-36'>
-    <div class='flex-shrink-0 w-16 mr-3'></div>
+<div
+  data-component-name="grid"
+  {{did-insert this.setupTooltips}}
+  class="mb-5 min-h-[300px]"
+>
+  <div class="flex flex-row gap-1 mt-36">
+    <div class="flex-shrink-0 w-16 mr-3"></div>
     {{#each @topics as |topic|}}
-      <div class='flex flex-col w-12'>
-        <div class='mb-4 ml-4 -rotate-45 whitespace-nowrap'>
+      <div class="flex flex-col w-12">
+        <div class="mb-4 ml-4 -rotate-45 whitespace-nowrap">
           {{topic.title}}
         </div>
       </div>
@@ -11,26 +15,26 @@
   </div>
 
   <div
-    class='flex flex-row gap-4 transition-all duration-300 ease-in-out
+    class="flex flex-row gap-4 transition-all duration-300 ease-in-out
       {{if
         @isPersonalProgressActive
-        "h-12"
-        "h-0 pointer-events-none opacity-0"
-      }}'
+        'h-12'
+        'h-0 pointer-events-none opacity-0'
+      }}"
   >
     <div
-      class='flex items-center flex-shrink-0 w-16 text-xs font-medium leading-tight text-gray-700'
+      class="flex items-center flex-shrink-0 w-16 text-xs font-medium leading-tight text-gray-700"
     >
       personal progress
     </div>
 
-    <div class='flex flex-row gap-1'>
+    <div class="flex flex-row gap-1">
       {{#each @topics as |topic|}}
         <GridCell
           @id={{topic.id}}
-          @progressType='personal'
+          @progressType="personal"
           @progress={{topic.progress.personal}}
-          @backgroundColor='bg-green-500'
+          @backgroundColor="bg-green-500"
           @handleCellClick={{this.handleCellClick}}
           @handleCellMouseEnter={{this.handleCellMouseEnter}}
           @handleCellMouseLeave={{this.handleCellMouseLeave}}
@@ -44,22 +48,22 @@
   </div>
 
   <div
-    class='flex flex-row gap-4 mt-1 transition-all duration-300 ease-in-out
-      {{if @isGroupProgressActive "h-12" "h-0 pointer-events-none opacity-0"}}'
+    class="flex flex-row gap-4 mt-1 transition-all duration-300 ease-in-out
+      {{if @isGroupProgressActive 'h-12' 'h-0 pointer-events-none opacity-0'}}"
   >
     <div
-      class='flex items-center flex-shrink-0 w-16 text-xs font-medium leading-tight text-gray-700'
+      class="flex items-center flex-shrink-0 w-16 text-xs font-medium leading-tight text-gray-700"
     >
       class average
     </div>
 
-    <div class='flex flex-row gap-1'>
+    <div class="flex flex-row gap-1">
       {{#each @topics as |topic|}}
         <GridCell
           @id={{topic.id}}
-          @progressType='group'
+          @progressType="group"
           @progress={{topic.progress.group}}
-          @backgroundColor='bg-blue-500'
+          @backgroundColor="bg-blue-500"
           @handleCellClick={{this.handleCellClick}}
           @handleCellMouseEnter={{this.handleCellMouseEnter}}
           @handleCellMouseLeave={{this.handleCellMouseLeave}}
@@ -72,27 +76,27 @@
     </div>
   </div>
 
-  {{!-- <div
-    class='flex flex-row gap-4 mt-1 transition-all duration-300 ease-in-out
-      {{if @isGroupProgressActive "h-12" "h-0 pointer-events-none opacity-0"}}'
+  <div
+    class="flex flex-row gap-4 mt-1 transition-all duration-300 ease-in-out
+      {{if @isBuggyAnswersActive 'h-12' 'h-0 pointer-events-none opacity-0'}}"
   >
     <div
-      class='flex items-center flex-shrink-0 w-16 text-xs font-medium leading-tight text-gray-700'
+      class="flex items-center flex-shrink-0 w-16 text-xs font-medium leading-tight text-gray-700"
     >
       errors last five tries
     </div>
 
-    <div class='flex flex-row gap-1'>
+    <div class="flex flex-row gap-1">
       {{#each @topics as |topic|}}
         <GridCell
           @id={{topic.id}}
-          @progressType='mistakes'
+          @progressType="mistakes"
           @progress={{this.calculateProgress
             part=topic.buggyAnswers.personal
             whole=5
           }}
           @label={{topic.buggyAnswers.personal}}
-          @backgroundColor='bg-red-500'
+          @backgroundColor="bg-red-500"
           @handleCellClick={{this.handleCellClick}}
           @handleCellMouseEnter={{this.handleCellMouseEnter}}
           @handleCellMouseLeave={{this.handleCellMouseLeave}}
@@ -103,38 +107,61 @@
         />
       {{/each}}
     </div>
-  </div> --}}
+  </div>
 </div>
 
-<div id='tooltip' class='z-20 transition-all pointer-events-none'>
+<div id="tooltip" class="z-20 transition-all pointer-events-none">
   <div
-    class='mx-6 my-2 transition-opacity duration-300 opacity-0 backdrop-blur-md'
+    class="mx-6 my-2 transition-opacity duration-300 opacity-0 backdrop-blur-md"
   >
     <article
-      class='py-8 bg-white rounded-lg shadow-lg bg-opacity-60 px-7 w-96'
+      class="py-8 bg-white rounded-lg shadow-lg bg-opacity-60 px-7 w-96"
       ...attributes
     >
       <h2
-        class='font-medium text-gray-700'
+        class="font-medium text-gray-700"
       >{{this.activeKnowledgeComponent.title}}</h2>
       <span
-        class='block mt-2 text-sm'
+        class="block mt-2 text-sm"
       >{{this.activeKnowledgeComponent.description}}</span>
 
-      <div class='mt-8'>
-        <ProgressBar
-          @title='Progress'
-          @titleSuffix={{if
-            (eq this.activeProgressType 'personal')
-            '(personal)'
-            '(class average)'
-          }}
-          @progress={{get
-            this.activeKnowledgeComponent.progress
-            this.activeProgressType
-          }}
-          @activeColor={{this.activeColor}}
-        />
+      <div class="mt-8">
+        {{#if (eq this.activeProgressType "mistakes")}}
+          <div class="flex items-end justify-between gap-2">
+            <span class="flex flex-col text-sm font-medium">
+              <span class="flex items-center h-6 gap-x-1.5">
+                <div
+                  class="flex justify-end text-sm font-light rounded-lg px-2 py-0.5 transition-colors flex-shrink-0
+                    {{if
+                      (eq this.activeKnowledgeComponent.buggyAnswers.personal 0)
+                      'bg-green-500 text-white'
+                      'bg-red-500 text-white'
+                    }}"
+                >{{this.activeKnowledgeComponent.buggyAnswers.personal}}
+                  out of 5</div>
+                incorrect answers provided
+              </span>
+              <span class="block mt-2 mb-3 mr-10 font-thin text-gray-700">
+                The last five times you applied this rule.
+              </span>
+            </span>
+
+          </div>
+        {{else}}
+          <ProgressBar
+            @title="Progress"
+            @titleSuffix={{if
+              (eq this.activeProgressType "personal")
+              "(personal)"
+              "(class average)"
+            }}
+            @progress={{get
+              this.activeKnowledgeComponent.progress
+              this.activeProgressType
+            }}
+            @activeColor={{this.activeColor}}
+          />
+        {{/if}}
       </div>
     </article>
   </div>

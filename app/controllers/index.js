@@ -6,6 +6,7 @@ import { SORT_TYPE, SORT_METHOD } from '../utils/sorting';
 const DEFAULT_SORT_TYPE = SORT_TYPE.ALPHABETICAL;
 const DEFAULT_PERSONAL_PROGRESS_ACTIVE = true;
 const DEFAULT_GROUP_PROGRESS_ACTIVE = false;
+const DEFAULT_BUGGY_ANSWERS_ACTIVE = false;
 
 export default class IndexController extends Controller {
   @tracked isSidePanelActive = false;
@@ -14,6 +15,7 @@ export default class IndexController extends Controller {
   @tracked selectedSortType = DEFAULT_SORT_TYPE;
   @tracked isPersonalProgressActive = DEFAULT_PERSONAL_PROGRESS_ACTIVE;
   @tracked isGroupProgressActive = DEFAULT_GROUP_PROGRESS_ACTIVE;
+  @tracked isBuggyAnswersActive = DEFAULT_BUGGY_ANSWERS_ACTIVE;
 
   get selectedSortMethod() {
     return SORT_METHOD[this.selectedSortType];
@@ -22,8 +24,9 @@ export default class IndexController extends Controller {
   queryParams = [
     {
       selectedSortType: 'sort',
-      isPersonalProgressActive: 'personal_progress',
-      isGroupProgressActive: 'group_progress',
+      isPersonalProgressActive: 'personal-progress',
+      isGroupProgressActive: 'group-progress',
+      isBuggyAnswersActive: 'buggy-answers',
     },
   ];
 
@@ -55,6 +58,7 @@ export default class IndexController extends Controller {
     this.selectedSortType = DEFAULT_SORT_TYPE;
     this.isPersonalProgressActive = DEFAULT_PERSONAL_PROGRESS_ACTIVE;
     this.isGroupProgressActive = DEFAULT_GROUP_PROGRESS_ACTIVE;
+    this.isBuggyAnswersActive = DEFAULT_BUGGY_ANSWERS_ACTIVE;
   }
 
   @action
@@ -67,11 +71,17 @@ export default class IndexController extends Controller {
     this.isGroupProgressActive = !this.isGroupProgressActive;
   }
 
+  @action
+  toggleBuggyAnswersActive() {
+    this.isBuggyAnswersActive = !this.isBuggyAnswersActive;
+  }
+
   get hasActiveFilters() {
     return (
       this.selectedSortType !== DEFAULT_SORT_TYPE ||
       this.isPersonalProgressActive !== DEFAULT_PERSONAL_PROGRESS_ACTIVE ||
-      this.isGroupProgressActive !== DEFAULT_GROUP_PROGRESS_ACTIVE
+      this.isGroupProgressActive !== DEFAULT_GROUP_PROGRESS_ACTIVE ||
+      this.isBuggyAnswersActive !== DEFAULT_BUGGY_ANSWERS_ACTIVE
     );
   }
 

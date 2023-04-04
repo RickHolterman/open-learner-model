@@ -6,6 +6,7 @@ import { tracked } from '@glimmer/tracking';
 const PROGRESS_TYPE = {
   PERSONAL: 'personal',
   GROUP: 'group',
+  MISTAKES: 'mistakes',
 };
 
 const COLOR_MAPPING = {
@@ -95,8 +96,5 @@ export default class GridComponent extends Component {
     })?.popperInstance;
   }
 
-  calculateProgress = (options) => {
-    console.log((options.part / options.whole) * 100);
-    return (options.part / options.whole) * 100;
-  };
+  calculateProgress = (options) => (options.part / options.whole) * 100;
 }

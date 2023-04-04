@@ -1,46 +1,55 @@
 <button
-  id={{concat @id '-' @progressType}}
-  type='button'
-  data-component-name='grid-cell'
-  class='relative z-10 flex items-center justify-center flex-shrink-0 w-12 h-12 gap-1 text-xs group min-w-12 min-h-12'
-  {{on 'click' (fn @handleCellClick @id @progressType)}}
-  {{on 'mouseenter' (fn @handleCellMouseEnter @id @progressType)}}
-  {{on 'mouseleave' (fn @handleCellMouseLeave @id @progressType)}}
+  id={{concat @id "-" @progressType}}
+  type="button"
+  data-component-name="grid-cell"
+  class="relative z-10 flex items-center justify-center flex-shrink-0 w-12 h-12 gap-1 text-xs bg-opacity-10 group min-w-12 min-h-12"
+  {{on "click" (fn @handleCellClick @id @progressType)}}
+  {{on "mouseenter" (fn @handleCellMouseEnter @id @progressType)}}
+  {{on "mouseleave" (fn @handleCellMouseLeave @id @progressType)}}
 >
   <div
-    class='group-hover:rounded-[30px] flex flex-col items-center justify-center bg-white border-2 transition-all border-white rounded-md shadow-sm duration-200 relative w-full h-full overflow-hidden'
+    class="group-hover:rounded-[30px] flex flex-col items-center justify-center bg-white border-2 transition-all border-white rounded-md shadow-sm duration-200 relative w-full h-full overflow-hidden"
   >
     <div
-      class='absolute top-0 left-0 z-10 w-full h-full {{@backgroundColor}}'
-      style='{{concat "opacity: " @progress "%"}}'
+      class="absolute top-0 left-0 z-10 w-full h-full
+        {{if
+          (and (eq @progressType 'mistakes') (eq @progress 0))
+          'bg-green-500'
+          @backgroundColor
+        }}"
+      style="{{concat
+        'opacity: '
+        (if (and (eq @progressType 'mistakes') (eq @progress 0)) 10 @progress)
+        '%'
+      }}"
     >
     </div>
     <div
-      class='relative z-20 transition-all duration-200 group-hover:opacity-0'
+      class="relative z-20 transition-all duration-200 group-hover:opacity-0"
     >
-      {{#if @label}}
+      {{#if (or @label (eq @label 0))}}
         {{@label}}
       {{else}}
         {{@progress}}%
       {{/if}}
     </div>
     <div
-      class='absolute top-0 left-0 z-20 flex items-center justify-center w-full h-full text-white transition-all duration-200 bg-opacity-0 opacity-0 group-hover:opacity-100 group-hover:bg-slate-700'
+      class="absolute top-0 left-0 z-20 flex items-center justify-center w-full h-full text-white transition-all duration-200 bg-opacity-0 opacity-0 group-hover:opacity-100 group-hover:bg-slate-700"
     >
       <div
-        class='relative w-5 h-5 transition-transform duration-200 scale-50 -translate-x-7 group-hover:translate-x-0 group-hover:scale-100'
+        class="relative w-5 h-5 transition-transform duration-200 scale-50 -translate-x-7 group-hover:translate-x-0 group-hover:scale-100"
       >
         <div
-          class='{{if @isActive "opacity-0 rotate-90"}}
-            transition-all duration-300'
+          class="{{if @isActive 'opacity-0 rotate-90'}}
+            transition-all duration-300"
         >
-          {{svg-jar 'arrow-right'}}
+          {{svg-jar "arrow-right"}}
         </div>
         <div
-          class='{{if @isActive "opacity-1" "opacity-0 -rotate-90"}}
-            transition-all absolute top-1/2 -translate-x-1/2 left-1/2 duration-300 -translate-y-1/2 w-6 h-6'
+          class="{{if @isActive 'opacity-1' 'opacity-0 -rotate-90'}}
+            transition-all absolute top-1/2 -translate-x-1/2 left-1/2 duration-300 -translate-y-1/2 w-6 h-6"
         >
-          {{svg-jar 'cross'}}
+          {{svg-jar "cross"}}
         </div>
       </div>
     </div>
