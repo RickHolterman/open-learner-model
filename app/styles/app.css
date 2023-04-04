@@ -1,3 +1,32 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Vendor overrides. */
+.es-control {
+  @apply border-none cursor-pointer px-4 h-9 rounded-full bg-none flex items-center bg-white hover:shadow-none !important;
+}
+
+.es-input {
+  @apply w-full text-xs font-normal text-slate-700 !important;
+}
+
+.es-input input {
+  @apply bg-transparent text-slate-700 placeholder:opacity-100 placeholder:text-gray-500 placeholder:font-light !important;
+}
+
+.es-arrow {
+  @apply border-t-slate-400 -translate-y-px !important;
+}
+
+.es-arrow-zone {
+  @apply w-auto !important;
+}
+
+.es-options {
+  @apply border-none rounded-md mt-2 text-xs px-0 font-normal bg-white shadow-md !important;
+}
+
+.es-option {
+  @apply px-4 py-3 bg-white hover:bg-sky-50 !important;
+}

@@ -1,0 +1,39 @@
+<div class='flex items-end justify-between gap-2' ...attributes>
+  <span class='flex flex-col text-sm font-medium'>
+    <span class='flex items-center h-6 gap-x-1'>
+      {{@title}}
+
+      {{#if @titleSuffix}}
+        <span class='font-thin text-gray-700'>
+          {{@titleSuffix}}
+        </span>
+      {{/if}}
+    </span>
+
+    {{#if @subtitle}}
+      <span class='block mt-2 mb-3 mr-10 font-thin text-gray-700'>
+        {{@subtitle}}
+      </span>
+    {{/if}}
+  </span>
+  <div
+    class='flex justify-end text-sm rounded-lg px-2 py-0.5 transition-colors
+      {{if
+        (eq @progress 100)
+        (or
+          (if (eq @activeColor "green") "bg-green-500 text-white font-medium")
+          (if (eq @activeColor "blue") "bg-blue-500 font-medium text-white")
+        )
+        "bg-slate-200 text-gray-900 "
+      }}'
+  >{{@progress}}%</div>
+</div>
+
+<div class='w-full h-1.5 rounded-md overflow-hidden mt-2 bg-gray-200'>
+  <div
+    style={{concat 'width: ' @progress '%'}}
+    class='h-full transition-all duration-300
+      {{if (eq @activeColor "green") "bg-green-500"}}
+      {{if (eq @activeColor "blue") "bg-blue-500"}}'
+  ></div>
+</div>
