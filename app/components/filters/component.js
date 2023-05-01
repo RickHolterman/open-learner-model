@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { isEmpty } from '@ember/utils';
-import { tracked } from '@glimmer/tracking';
 import { SORT_TYPE } from '../../utils/sorting';
 
 export default class FiltersComponent extends Component {

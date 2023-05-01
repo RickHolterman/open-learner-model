@@ -1,0 +1,224 @@
+{{! Sidepanel overlay. }}
+<div
+  class="w-screen h-screen fixed top-0 left-0
+    {{if @isActive 'opacity-100' 'opacity-0 pointer-events-none'}}"
+  {{on "click" this.closeSidePanel}}
+></div>
+
+{{! Sidepanel. }}
+<aside
+  class="top-0 bg-slate-900 bg-opacity-5 backdrop-blur-3xl w-[500px] fixed right-0 z-30 transition-all h-full
+    {{unless @isActive 'translate-x-[500px]'}}"
+>
+  <div class="h-full pt-20 mx-9">
+
+    {{! Close button. }}
+    <button
+      type="button"
+      class="absolute flex items-center justify-center flex-shrink-0 w-5 h-5 top-5 right-5"
+      {{on "click" this.closeSidePanel}}
+    >
+      <div
+        class="rounded-[30px] flex flex-col items-center justify-center text-white bg-slate-700 transition-all border-white duration-200 relative w-full h-full overflow-hidden"
+      >
+        <div
+          class="absolute w-5 h-5 transition-all duration-300 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+        >
+          {{svg-jar "cross"}}
+        </div>
+      </div>
+    </button>
+
+    <h2 class="relative pb-6 text-2xl">
+      {{@activeKnowledgeComponent.title}}
+    </h2>
+
+    <div
+      class="h-[calc(100%_-_6rem)] overflow-scroll flex flex-col gap-6 mt-10 pb-10"
+    >
+      <details class="group">
+        <summary
+          class="flex items-center justify-between pb-6 overflow-hidden border-b border-white cursor-pointer group-open:border-none group-open:pb-0"
+        >
+          <h3 class="text-base font-medium">Knowlegde level</h3>
+          <span
+            class="w-6 h-6 text-lg text-gray-800 transition-transform duration-200 -rotate-45 group-open:rotate-0"
+          >
+            {{svg-jar "cross"}}
+          </span>
+        </summary>
+        <div class="px-6 py-8 mt-4 bg-white rounded-md bg-opacity-80">
+          <ProgressBar
+            @title="Personal progress"
+            @progress={{get @activeKnowledgeComponent.progress "personal"}}
+            @activeColor="green"
+          />
+
+          <ProgressBar
+            @title="Class average"
+            @progress={{get @activeKnowledgeComponent.progress "group"}}
+            @activeColor="blue"
+            class="mt-8"
+          />
+        </div>
+      </details>
+
+      <details class="group">
+        <summary
+          class="flex items-center justify-between pb-6 overflow-hidden border-b border-white cursor-pointer group-open:border-none group-open:pb-0"
+        >
+          <h3 class="text-base font-medium">How to improve?</h3>
+          <span
+            class="w-6 h-6 text-lg text-gray-800 transition-transform duration-200 -rotate-45 group-open:rotate-0"
+          >
+            {{svg-jar "cross"}}
+          </span>
+        </summary>
+
+        <div class="px-6 py-8 mt-4 bg-white rounded-md bg-opacity-80">
+          <ProgressBar
+            @title="Anwering correctly"
+            @titleSuffix="(last 5 tries)"
+            @subtitle={{concat
+              "You correctly applied "
+              @activeKnowledgeComponent.title
+              " 4 out of 5 times during your last 5 tries."
+            }}
+            @progress="80"
+            @activeColor="green"
+          />
+
+          <ProgressBar
+            @title="Hints used"
+            @titleSuffix="(last 5 tries)"
+            @subtitle="You requested a hint 2 times during your last 5 tries. Use less hints to improve your score."
+            @progress="60"
+            @activeColor="green"
+            class="mt-8"
+          />
+
+          <ProgressBar
+            @title="Viewed solution"
+            @titleSuffix="(last 5 tries)"
+            @subtitle={{concat
+              "You requested an exercise's solution 1 time during your last 5 tries when you needed to apply "
+              @activeKnowledgeComponent.title
+              "."
+            }}
+            @progress="80"
+            @activeColor="green"
+            class="mt-8"
+          />
+
+          <ProgressBar
+            @title="Choosing rule correctly"
+            @titleSuffix="(last 5 tries)"
+            @subtitle={{concat
+              "You correctly identified that you had to apply "
+              @activeKnowledgeComponent.title
+              " 4 out of five 5 times when needing to apply this rule."
+            }}
+            @progress="80"
+            @activeColor="green"
+            class="mt-8"
+          />
+
+          <ProgressBar
+            @title="Naming rule correctly"
+            @titleSuffix="(last 5 tries)"
+            @subtitle={{concat
+              "You correctly identified that you applied "
+              @activeKnowledgeComponent.title
+              " 3 out of 5 times when needing to apply this rule."
+            }}
+            @progress="60"
+            @activeColor="green"
+            class="mt-8"
+          />
+        </div>
+      </details>
+
+      <details class="group">
+        <summary
+          class="flex items-center justify-between pb-6 overflow-hidden border-b border-white cursor-pointer group-open:border-none group-open:pb-0"
+        >
+          <h3 class="text-base font-medium">Previous mistakes</h3>
+          <span
+            class="w-6 h-6 text-lg text-gray-800 transition-transform duration-200 -rotate-45 group-open:rotate-0"
+          >
+            {{svg-jar "cross"}}
+          </span>
+        </summary>
+
+        <span class="flex flex-col mt-4 mr-10 text-sm font-thin text-gray-700">
+          <span class="inline">
+            You made a mistake
+            <div
+              class="inline-block font-light rounded-lg px-2 py-0.5 transition-colors
+                {{if
+                  (eq @activeKnowledgeComponent.buggyAnswers.personal 0)
+                  'bg-green-500 text-white'
+                  'bg-red-400 text-white'
+                }}"
+            >
+              {{@activeKnowledgeComponent.buggyAnswers.personal}}
+              out of 5
+            </div>
+            {{"  "}}
+            times, the last five times you applied this rule.
+            {{#if (eq @activeKnowledgeComponent.buggyAnswers.personal 0)}}
+              Any future mistakes made, will be displayed here.
+            {{/if}}
+          </span>
+        </span>
+
+        <div
+          class="relative flex flex-col gap-6 px-6 py-8 mt-8 text-sm font-medium bg-white rounded-md bg-opacity-80"
+        >
+          <div
+            class="max-w-max absolute right-4 font-normal top-0 rounded-lg px-2 py-0.5 -translate-y-3 transition-colors bg-gray-100 shadow-sm text-gray-600"
+          >
+            Mistake 1
+          </div>
+
+          <span class="flex flex-col gap-2">
+            Initial formula
+            <span
+              class="relative p-4 overflow-hidden font-mono rounded-md text-amber-700 bg-amber-100"
+            >
+              ¬(q → r) ∨ q ∨ r
+              <div
+                class="absolute top-0 left-0 w-1 h-full bg-transparent"
+              ></div>
+            </span>
+          </span>
+
+          <span class="flex flex-col gap-2">
+            Your answer after applying
+            {{@activeKnowledgeComponent.title}}
+
+            <span
+              class="relative p-4 overflow-hidden font-mono rounded-md text-amber-700 bg-amber-100"
+            >
+              (¬¬q ∨ ¬r) ∨ q ∨ r
+              <div class="absolute top-0 left-0 w-1 h-full bg-red-400"></div>
+            </span>
+
+          </span>
+
+          <span class="flex flex-col gap-2">
+            Expected answer after applying
+            {{@activeKnowledgeComponent.title}}
+
+            <span
+              class="relative p-4 overflow-hidden font-mono rounded-md text-amber-700 bg-amber-100"
+            >
+              (¬¬q ∧ ¬r) ∨ q ∨ r
+              <div class="absolute top-0 left-0 w-1 h-full bg-green-500"></div>
+            </span>
+          </span>
+        </div>
+      </details>
+    </div>
+  </div>
+</aside>
