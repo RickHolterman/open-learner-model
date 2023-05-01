@@ -86,88 +86,192 @@
       {{this.activeKnowledgeComponent.title}}
     </h2>
 
-    <div class="h-[calc(100%_-_8rem)] overflow-scroll">
+    <div
+      class="h-[calc(100%_-_8rem)] overflow-scroll flex flex-col gap-6 mt-10"
+    >
+      <details class="group">
+        <summary
+          class="flex items-center justify-between pb-6 border-b border-white cursor-pointer group-open:border-none group-open:pb-0"
+        >
+          <h3 class="text-base font-medium">Knowlegde level</h3>
+          <span
+            class="w-6 h-6 text-lg text-gray-800 transition-transform duration-200 -rotate-45 group-open:rotate-0"
+          >
+            {{svg-jar "cross"}}
+          </span>
+        </summary>
+        <div class="px-6 py-8 mt-4 bg-white rounded-md bg-opacity-80">
+          <ProgressBar
+            @title="Personal progress"
+            @progress={{get this.activeKnowledgeComponent.progress "personal"}}
+            @activeColor="green"
+          />
 
-      <h3 class="mt-6 text-base font-medium">Knowlegde level</h3>
-      <div class="px-6 py-8 mt-4 mb-10 bg-white rounded-md bg-opacity-80">
-        <ProgressBar
-          @title="Personal progress"
-          @progress={{get this.activeKnowledgeComponent.progress "personal"}}
-          @activeColor="green"
-        />
+          <ProgressBar
+            @title="Class average"
+            @progress={{get this.activeKnowledgeComponent.progress "group"}}
+            @activeColor="blue"
+            class="mt-8"
+          />
+        </div>
+      </details>
 
-        <ProgressBar
-          @title="Class average"
-          @progress={{get this.activeKnowledgeComponent.progress "group"}}
-          @activeColor="blue"
-          class="mt-8"
-        />
-      </div>
+      <details class="group">
+        <summary
+          class="flex items-center justify-between pb-6 border-b border-white cursor-pointer group-open:border-none group-open:pb-0"
+        >
+          <h3 class="text-base font-medium">How to improve?</h3>
+          <span
+            class="w-6 h-6 text-lg text-gray-800 transition-transform duration-200 -rotate-45 group-open:rotate-0"
+          >
+            {{svg-jar "cross"}}
+          </span>
+        </summary>
 
-      <h3 class="mt-12 text-base font-medium">How to improve?</h3>
-      <div class="px-6 py-8 mt-4 mb-12 bg-white rounded-md bg-opacity-80">
-        <ProgressBar
-          @title="Anwering correctly"
-          @titleSuffix="(last 5 tries)"
-          @subtitle={{concat
-            "You correctly applied "
-            this.activeKnowledgeComponent.title
-            " 4 out of 5 times during your last 5 tries."
-          }}
-          @progress="80"
-          @activeColor="green"
-        />
+        <div class="px-6 py-8 mt-4 bg-white rounded-md bg-opacity-80">
+          <ProgressBar
+            @title="Anwering correctly"
+            @titleSuffix="(last 5 tries)"
+            @subtitle={{concat
+              "You correctly applied "
+              this.activeKnowledgeComponent.title
+              " 4 out of 5 times during your last 5 tries."
+            }}
+            @progress="80"
+            @activeColor="green"
+          />
 
-        <ProgressBar
-          @title="Hints used"
-          @titleSuffix="(last 5 tries)"
-          @subtitle="You requested a hint 2 times during your last 5 tries. Use less hints to improve your score."
-          @progress="60"
-          @activeColor="green"
-          class="mt-8"
-        />
+          <ProgressBar
+            @title="Hints used"
+            @titleSuffix="(last 5 tries)"
+            @subtitle="You requested a hint 2 times during your last 5 tries. Use less hints to improve your score."
+            @progress="60"
+            @activeColor="green"
+            class="mt-8"
+          />
 
-        <ProgressBar
-          @title="Viewed solution"
-          @titleSuffix="(last 5 tries)"
-          @subtitle={{concat
-            "You requested an exercise's solution 1 time during your last 5 tries when you needed to apply "
-            this.activeKnowledgeComponent.title
-            "."
-          }}
-          @progress="80"
-          @activeColor="green"
-          class="mt-8"
-        />
+          <ProgressBar
+            @title="Viewed solution"
+            @titleSuffix="(last 5 tries)"
+            @subtitle={{concat
+              "You requested an exercise's solution 1 time during your last 5 tries when you needed to apply "
+              this.activeKnowledgeComponent.title
+              "."
+            }}
+            @progress="80"
+            @activeColor="green"
+            class="mt-8"
+          />
 
-        <ProgressBar
-          @title="Choosing rule correctly"
-          @titleSuffix="(last 5 tries)"
-          @subtitle={{concat
-            "You correctly identified that you had to apply "
-            this.activeKnowledgeComponent.title
-            " 4 out of five 5 times when needing to apply this rule."
-          }}
-          @progress="80"
-          @activeColor="green"
-          class="mt-8"
-        />
+          <ProgressBar
+            @title="Choosing rule correctly"
+            @titleSuffix="(last 5 tries)"
+            @subtitle={{concat
+              "You correctly identified that you had to apply "
+              this.activeKnowledgeComponent.title
+              " 4 out of five 5 times when needing to apply this rule."
+            }}
+            @progress="80"
+            @activeColor="green"
+            class="mt-8"
+          />
 
-        <ProgressBar
-          @title="Naming rule correctly"
-          @titleSuffix="(last 5 tries)"
-          @subtitle={{concat
-            "You correctly identified that you applied "
-            this.activeKnowledgeComponent.title
-            " 3 out of 5 times when needing to apply this rule."
-          }}
-          @progress="60"
-          @activeColor="green"
-          class="mt-8"
-        />
-      </div>
+          <ProgressBar
+            @title="Naming rule correctly"
+            @titleSuffix="(last 5 tries)"
+            @subtitle={{concat
+              "You correctly identified that you applied "
+              this.activeKnowledgeComponent.title
+              " 3 out of 5 times when needing to apply this rule."
+            }}
+            @progress="60"
+            @activeColor="green"
+            class="mt-8"
+          />
+        </div>
+      </details>
 
+      <details class="group">
+        <summary
+          class="flex items-center justify-between pb-6 border-b border-white cursor-pointer group-open:border-none group-open:pb-0"
+        >
+          <h3 class="text-base font-medium">Previous mistakes</h3>
+          <span
+            class="w-6 h-6 text-lg text-gray-800 transition-transform duration-200 -rotate-45 group-open:rotate-0"
+          >
+            {{svg-jar "cross"}}
+          </span>
+        </summary>
+
+        <span class="flex flex-col mt-4 mr-10 text-sm font-thin text-gray-700">
+          <span class="inline">
+            You made a mistake
+            <div
+              class="inline-block font-light rounded-lg px-2 py-0.5 transition-colors
+                {{if
+                  (eq this.activeKnowledgeComponent.buggyAnswers.personal 0)
+                  'bg-green-500 text-white'
+                  'bg-red-400 text-white'
+                }}"
+            >
+              {{this.activeKnowledgeComponent.buggyAnswers.personal}}
+              out of 5
+            </div>
+            {{"  "}}
+            times, the last five times you applied this rule.
+            {{#if (eq this.activeKnowledgeComponent.buggyAnswers.personal 0)}}
+              Any future mistakes made, will be displayed here.
+            {{/if}}
+          </span>
+        </span>
+
+        <div
+          class="relative flex flex-col gap-6 px-6 py-8 mt-8 text-sm font-medium bg-white rounded-md bg-opacity-80"
+        >
+          <div
+            class="max-w-max absolute right-4 font-normal top-0 rounded-lg px-2 py-0.5 -translate-y-3 transition-colors bg-gray-100 shadow-sm text-gray-600"
+          >
+            Mistake 1
+          </div>
+
+          <span class="flex flex-col gap-2">
+            Initial formula
+            <span
+              class="relative p-4 overflow-hidden font-mono rounded-md text-amber-700 bg-amber-100"
+            >
+              ¬(q → r) ∨ q ∨ r
+              <div
+                class="absolute top-0 left-0 w-1 h-full bg-transparent"
+              ></div>
+            </span>
+          </span>
+
+          <span class="flex flex-col gap-2">
+            Your answer after applying
+            {{this.activeKnowledgeComponent.title}}
+
+            <span
+              class="relative p-4 overflow-hidden font-mono rounded-md text-amber-700 bg-amber-100"
+            >
+              (¬¬q ∨ ¬r) ∨ q ∨ r
+              <div class="absolute top-0 left-0 w-1 h-full bg-red-400"></div>
+            </span>
+
+          </span>
+
+          <span class="flex flex-col gap-2">
+            Expected answer after applying
+            {{this.activeKnowledgeComponent.title}}
+
+            <span
+              class="relative p-4 overflow-hidden font-mono rounded-md text-amber-700 bg-amber-100"
+            >
+              (¬¬q ∧ ¬r) ∨ q ∨ r
+              <div class="absolute top-0 left-0 w-1 h-full bg-green-500"></div>
+            </span>
+          </span>
+        </div>
+      </details>
     </div>
-
   </div>
 </aside>
