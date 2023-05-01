@@ -43,7 +43,7 @@ export default class GridComponent extends Component {
       this.args.closeSidePanel(id);
     } else {
       this.activeIdSidePanel = id;
-      this.args.openSidePanel(id);
+      this.args.openSidePanel(id, progressType);
     }
   }
 

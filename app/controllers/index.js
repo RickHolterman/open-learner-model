@@ -7,6 +7,7 @@ const DEFAULT_SORT_TYPE = SORT_TYPE.ALPHABETICAL;
 const DEFAULT_PERSONAL_PROGRESS_ACTIVE = true;
 const DEFAULT_GROUP_PROGRESS_ACTIVE = false;
 const DEFAULT_BUGGY_ANSWERS_ACTIVE = false;
+const DEFAULT_SIDE_PANEL_DETAILS_OPEN = 'progress';
 
 export default class IndexController extends Controller {
   @tracked isSidePanelActive = false;
@@ -16,6 +17,7 @@ export default class IndexController extends Controller {
   @tracked isPersonalProgressActive = DEFAULT_PERSONAL_PROGRESS_ACTIVE;
   @tracked isGroupProgressActive = DEFAULT_GROUP_PROGRESS_ACTIVE;
   @tracked isBuggyAnswersActive = DEFAULT_BUGGY_ANSWERS_ACTIVE;
+  @tracked sidePanelDetailsOpen = DEFAULT_SIDE_PANEL_DETAILS_OPEN;
 
   get selectedSortMethod() {
     return SORT_METHOD[this.selectedSortType];
@@ -31,10 +33,19 @@ export default class IndexController extends Controller {
   ];
 
   @action
-  openSidePanel(id) {
-    console.log(id);
+  openSidePanel(id, progressType) {
     this.activeId = id;
     this.isSidePanelActive = true;
+    this.updateSidePanelDetailsOpen(progressType);
+  }
+
+  @action
+  updateSidePanelDetailsOpen(progressType) {
+    if (progressType === 'personal' || progressType === 'group') {
+      this.sidePanelDetailsOpen = 'progress';
+    } else if (progressType === 'mistakes') {
+      this.sidePanelDetailsOpen = 'mistakes';
+    }
   }
 
   @action
@@ -86,7 +97,6 @@ export default class IndexController extends Controller {
   }
 
   get activeKnowledgeComponent() {
-    console.log(this.model.grid.topics);
     return this.model.grid.topics.find((topic) => {
       return topic.id === this.activeId;
     });

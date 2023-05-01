@@ -9,6 +9,7 @@
 <aside
   class="top-0 bg-slate-900 bg-opacity-5 backdrop-blur-3xl w-[500px] fixed right-0 z-30 transition-all h-full
     {{unless @isActive 'translate-x-[500px]'}}"
+  {{did-update this.didUpdateDetailsOpen @detailsOpen}}
 >
   <div class="h-full pt-20 mx-9">
 
@@ -36,7 +37,7 @@
     <div
       class="h-[calc(100%_-_6rem)] overflow-scroll flex flex-col gap-6 mt-10 pb-10"
     >
-      <details class="group">
+      <details class="group" data-section-type="progress">
         <summary
           class="flex items-center justify-between pb-6 overflow-hidden border-b border-white cursor-pointer group-open:border-none group-open:pb-0"
         >
@@ -47,7 +48,7 @@
             {{svg-jar "cross"}}
           </span>
         </summary>
-        <div class="px-6 py-8 mt-4 bg-white rounded-md bg-opacity-80">
+        <div class="px-6 py-8 mt-4 mb-4 bg-white rounded-md bg-opacity-80">
           <ProgressBar
             @title="Personal progress"
             @progress={{get @activeKnowledgeComponent.progress "personal"}}
@@ -63,7 +64,7 @@
         </div>
       </details>
 
-      <details class="group">
+      <details class="group" data-section-type="improvement-details">
         <summary
           class="flex items-center justify-between pb-6 overflow-hidden border-b border-white cursor-pointer group-open:border-none group-open:pb-0"
         >
@@ -75,7 +76,7 @@
           </span>
         </summary>
 
-        <div class="px-6 py-8 mt-4 bg-white rounded-md bg-opacity-80">
+        <div class="px-6 py-8 mt-4 mb-4 bg-white rounded-md bg-opacity-80">
           <ProgressBar
             @title="Anwering correctly"
             @titleSuffix="(last 5 tries)"
@@ -138,7 +139,7 @@
         </div>
       </details>
 
-      <details class="group">
+      <details class="group" data-section-type="mistakes">
         <summary
           class="flex items-center justify-between pb-6 overflow-hidden border-b border-white cursor-pointer group-open:border-none group-open:pb-0"
         >
@@ -150,7 +151,9 @@
           </span>
         </summary>
 
-        <span class="flex flex-col mt-4 mr-10 text-sm font-thin text-gray-700">
+        <span
+          class="flex flex-col mt-4 mb-4 mr-10 text-sm font-thin text-gray-700"
+        >
           <span class="inline">
             You made a mistake
             <div
