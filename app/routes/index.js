@@ -1,4 +1,5 @@
 import Route from '@ember/routing/route';
+import { service } from '@ember/service';
 import { v4 as uuid } from 'uuid';
 
 const GRID_MOCK = {
@@ -200,7 +201,12 @@ const LEARNER_DATA_MOCK = {
 };
 
 export default class IndexRoute extends Route {
-  model() {
-    return LEARNER_DATA_MOCK;
+  @service store;
+
+  async model() {
+    return {
+      learnerData: LEARNER_DATA_MOCK,
+      interactions: this.store.findAll('interaction'),
+    };
   }
 }

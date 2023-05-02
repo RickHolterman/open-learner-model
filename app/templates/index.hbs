@@ -48,6 +48,10 @@
         @isBuggyAnswersActive={{this.isBuggyAnswersActive}}
       />
     </div>
+
+    {{#each this.model.interactions as |interaction|}}
+      {{interaction.input.service}}
+    {{/each}}
   </div>
 </main>
 

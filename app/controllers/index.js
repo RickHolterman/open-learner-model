@@ -97,7 +97,7 @@ export default class IndexController extends Controller {
   }
 
   get activeKnowledgeComponent() {
-    return this.model.grid.topics.find((topic) => {
+    return this.model.learnerData.grid.topics.find((topic) => {
       return topic.id === this.activeId;
     });
   }
@@ -107,6 +107,6 @@ export default class IndexController extends Controller {
   }
 
   get topics() {
-    return this.model.grid.topics.sort(this.selectedSortMethod);
+    return this.model.learnerData.grid.topics.sort(this.selectedSortMethod);
   }
 }
