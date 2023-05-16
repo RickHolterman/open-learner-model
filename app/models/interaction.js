@@ -8,6 +8,7 @@ export default class InteractionModel extends Model {
   @attr('string') sessionid;
   @attr('string') source;
   @attr('string') taskid;
+  @attr('string') ruleid;
   @attr('date') time;
   @attr('string') userid;
   @attr('string') version;
