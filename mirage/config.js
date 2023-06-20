@@ -22,4 +22,14 @@ export default function () {
       },
     };
   });
+
+  this.get('/students', (server) => {
+    return {
+      data: server.db.students.map((attrs) => ({
+        type: 'student',
+        id: attrs.id,
+        attributes: attrs,
+      })),
+    };
+  });
 }

@@ -33,7 +33,7 @@
         <GridCell
           @id={{topic.id}}
           @progressType="personal"
-          @progress={{topic.progress.personal}}
+          @progress={{topic.progress.personal.totalLevel}}
           @backgroundColor="bg-green-500"
           @handleCellClick={{this.handleCellClick}}
           @handleCellMouseEnter={{this.handleCellMouseEnter}}
@@ -62,7 +62,7 @@
         <GridCell
           @id={{topic.id}}
           @progressType="group"
-          @progress={{topic.progress.group}}
+          @progress={{topic.progress.group.totalLevel}}
           @backgroundColor="bg-blue-500"
           @handleCellClick={{this.handleCellClick}}
           @handleCellMouseEnter={{this.handleCellMouseEnter}}
@@ -83,7 +83,7 @@
     <div
       class="flex items-center flex-shrink-0 w-16 text-xs font-medium leading-tight text-gray-700"
     >
-      errors last five tries
+      errors last 5 attempts
     </div>
 
     <div class="flex flex-row gap-1">
@@ -92,10 +92,10 @@
           @id={{topic.id}}
           @progressType="mistakes"
           @progress={{this.calculateProgress
-            part=topic.buggyAnswers.personal
+            part=topic.progress.personal.buggyAnswersAmount
             whole=5
           }}
-          @label={{topic.buggyAnswers.personal}}
+          @label={{topic.progress.personal.buggyAnswersAmount}}
           @backgroundColor="bg-red-400"
           @handleCellClick={{this.handleCellClick}}
           @handleCellMouseEnter={{this.handleCellMouseEnter}}
@@ -134,12 +134,15 @@
                 <div
                   class="flex justify-end text-sm font-light rounded-lg px-2 py-0.5 transition-colors flex-shrink-0
                     {{if
-                      (eq this.activeKnowledgeComponent.buggyAnswers.personal 0)
+                      (eq
+                        this.activeKnowledgeComponent.progress.personal.buggyAnswersAmount
+                        0
+                      )
                       'bg-green-500 text-white'
                       'bg-red-400 text-white'
                     }}"
                 >
-                  {{this.activeKnowledgeComponent.buggyAnswers.personal}}
+                  {{this.activeKnowledgeComponent.progress.personal.buggyAnswersAmount}}
                   out of 5</div>
                 times
               </span>
@@ -156,9 +159,10 @@
               "(personal)"
               "(class average)"
             }}
-            @progress={{get
-              this.activeKnowledgeComponent.progress
-              this.activeProgressType
+            @progress={{if
+              (eq this.activeProgressType "personal")
+              this.activeKnowledgeComponent.progress.personal.totalLevel
+              this.activeKnowledgeComponent.progress.group.totalLevel
             }}
             @activeColor={{this.activeColor}}
           />

@@ -19,44 +19,44 @@ const SORT_METHOD = {
     return 0;
   },
   [SORT_TYPE.PERSONAL_DESC]: (a, b) => {
-    if (a.progress.personal > b.progress.personal) {
+    if (a.progress.personal.totalLevel > b.progress.personal.totalLevel) {
       return -1;
     }
 
-    if (a.progress.personal < b.progress.personal) {
+    if (a.progress.personal.totalLevel < b.progress.personal.totalLevel) {
       return 1;
     }
 
     return 0;
   },
   [SORT_TYPE.PERSONAL_ASC]: (a, b) => {
-    if (a.progress.personal < b.progress.personal) {
+    if (a.progress.personal.totalLevel < b.progress.personal.totalLevel) {
       return -1;
     }
 
-    if (a.progress.personal > b.progress.personal) {
+    if (a.progress.personal.totalLevel > b.progress.personal.totalLevel) {
       return 1;
     }
 
     return 0;
   },
   [SORT_TYPE.GROUP_DESC]: (a, b) => {
-    if (a.progress.group > b.progress.group) {
+    if (a.progress.group.totalLevel > b.progress.group.totalLevel) {
       return -1;
     }
 
-    if (a.progress.group < b.progress.group) {
+    if (a.progress.group.totalLevel < b.progress.group.totalLevel) {
       return 1;
     }
 
     return 0;
   },
   [SORT_TYPE.GROUP_ASC]: (a, b) => {
-    if (a.progress.group < b.progress.group) {
+    if (a.progress.group.totalLevel < b.progress.group.totalLevel) {
       return -1;
     }
 
-    if (a.progress.group > b.progress.group) {
+    if (a.progress.group.totalLevel > b.progress.group.totalLevel) {
       return 1;
     }
 

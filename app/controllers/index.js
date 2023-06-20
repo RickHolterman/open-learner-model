@@ -7,7 +7,7 @@ const DEFAULT_SORT_TYPE = SORT_TYPE.ALPHABETICAL;
 const DEFAULT_PERSONAL_PROGRESS_ACTIVE = true;
 const DEFAULT_GROUP_PROGRESS_ACTIVE = false;
 const DEFAULT_BUGGY_ANSWERS_ACTIVE = false;
-const DEFAULT_SIDE_PANEL_DETAILS_OPEN = 'progress';
+const DEFAULT_SIDE_PANEL_DETAILS_OPEN = ['progress'];
 
 export default class IndexController extends Controller {
   @tracked isSidePanelActive = false;
@@ -29,6 +29,7 @@ export default class IndexController extends Controller {
       isPersonalProgressActive: 'personal-progress',
       isGroupProgressActive: 'group-progress',
       isBuggyAnswersActive: 'buggy-answers',
+      userId: 'user-id',
     },
   ];
 
@@ -42,9 +43,24 @@ export default class IndexController extends Controller {
   @action
   updateSidePanelDetailsOpen(progressType) {
     if (progressType === 'personal' || progressType === 'group') {
-      this.sidePanelDetailsOpen = 'progress';
+      const detailElements = document.querySelectorAll('details');
+      this.sidePanelDetailsOpen = [];
+
+      if (detailElements?.length >= 1) {
+        detailElements.forEach((detailElement) => {
+          if (detailElement.open === true) {
+            this.sidePanelDetailsOpen.push(detailElement.dataset.sectionType);
+          }
+        });
+      }
+
+      if (this.sidePanelDetailsOpen.includes('improvement-details')) {
+        this.sidePanelDetailsOpen = ['progress', 'improvement-details'];
+      } else {
+        this.sidePanelDetailsOpen = ['progress'];
+      }
     } else if (progressType === 'mistakes') {
-      this.sidePanelDetailsOpen = 'mistakes';
+      this.sidePanelDetailsOpen = ['mistakes'];
     }
   }
 
