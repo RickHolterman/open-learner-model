@@ -4,7 +4,10 @@ const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
 module.exports = function (defaults) {
   const app = new EmberApp(defaults, {
-    // Add options here
+    origin: 'https://rickholterman.github.io/open-learner-model/',
+    fingerprint: {
+      prepend: 'https://rickholterman.github.io/open-learner-model/',
+    },
   });
 
   // Use `app.import` to add additional libraries to the generated
