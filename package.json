@@ -44,6 +44,7 @@
     "ember-cli-github-pages": "^0.2.2",
     "ember-cli-htmlbars": "^6.2.0",
     "ember-cli-inject-live-reload": "^2.1.0",
+    "ember-cli-mirage": "^2.4.0",
     "ember-cli-sri": "^2.1.1",
     "ember-cli-terser": "^4.0.2",
     "ember-data": "~4.11.3",
@@ -74,9 +75,6 @@
     "tracked-built-ins": "^3.1.1",
     "uuid": "^9.0.0",
     "webpack": "^5.75.0"
-  },
-  "dependencies": {
-    "ember-cli-mirage": "^2.4.0"
   },
   "engines": {
     "node": "14.* || 16.* || >= 18"
