@@ -12,6 +12,7 @@
   },
   "scripts": {
     "build": "npx tailwindcss -i ./app/styles/app.css -o ./public/tailwind.css && ember build --environment=production",
+    "deploy": "npx tailwindcss -i ./app/styles/app.css -o ./public/tailwind.css && ember build --environment production && ember github-pages:commit --message \"Deploy gh-pages from commit $(git rev-parse HEAD)\" && git push origin gh-pages:gh-pages",
     "lint": "concurrently \"npm:lint:*(!fix)\" --names \"lint:\"",
     "lint:fix": "concurrently \"npm:lint:*:fix\" --names \"fix:\"",
     "lint:hbs": "ember-template-lint .",
