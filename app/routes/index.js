@@ -133,6 +133,7 @@ let queryExpectedAnswer = function (buggyInteraction, allInteractions) {
         buggyInteraction.input.state.session &&
       interaction.input.state.prefix === buggyInteraction.input.state.prefix &&
       (interaction.output.diagnose.diagnosetype === 'expected' ||
+        interaction.output.diagnose.diagnosetype === 'similar' ||
         interaction.service === 'onefirst')
     );
   });
@@ -165,7 +166,8 @@ let didProvideBuggyAnswer = function (interaction) {
   if (isEmpty(interaction.output?.diagnose?.diagnosetype) === false) {
     return (
       interaction.service === 'diagnose' &&
-      interaction.output.diagnose.diagnosetype === 'buggy'
+      (interaction.output.diagnose.diagnosetype === 'buggy' ||
+        interaction.output.diagnose.diagnosetype === 'notequiv')
     );
   }
 
@@ -200,6 +202,8 @@ export default class IndexRoute extends Route {
 
     let interactions = await this.store.findAll('interaction');
     let students = await this.store.findAll('student');
+
+    console.log(interactions);
 
     let groupData = students.map((student) => {
       let userId = student.userid;
