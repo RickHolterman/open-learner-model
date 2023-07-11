@@ -41,7 +41,11 @@ module.exports = function (environment) {
   }
 
   if (environment === 'production') {
-    // here you can enable a production-specific feature
+    ENV.baseURL = '/open-learner-model';
+    ENV.locationType = 'hash';
+    ENV['ember-cli-mirage'] = {
+      enabled: true,
+    };
   }
 
   return ENV;
