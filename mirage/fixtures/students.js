@@ -1,5 +1,5 @@
 export default [
-  { userid: 'beginner' },
-  { userid: 'intermediate' },
-  { userid: 'advanced' },
+  { userid: 'low-scoring' },
+  { userid: 'medium-scoring' },
+  { userid: 'high-scoring' },
 ];

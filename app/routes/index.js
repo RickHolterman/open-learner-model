@@ -52,7 +52,10 @@ let queryInteractions = function ({
       .filter((item) => services.includes(item.service))
       // Apply filter by interaction types.
       .filter((interaction) =>
-        rules !== null ? rules.includes(interaction.ruleid) : true
+        rules !== null
+          ? rules.includes(interaction.ruleid) ||
+            rules.includes(interaction.input?.rule)
+          : true
       )
       // Apply filter by user id.
       .filter((interaction) =>
@@ -126,22 +129,49 @@ let queryRelatedInteractions = function ({
   return interactions;
 };
 
-let queryExpectedAnswer = function (buggyInteraction, allInteractions) {
+let queryExpectedAnswer = function (
+  buggyInteraction,
+  allInteractions,
+  userId,
+  initialFormula
+) {
   let expectedInteraction = allInteractions.find((interaction) => {
-    return (
-      interaction.input?.state?.session ===
-        buggyInteraction.input.state.session &&
-      interaction.input.state.prefix === buggyInteraction.input.state.prefix &&
-      (interaction.output.diagnose.diagnosetype === 'expected' ||
-        interaction.output.diagnose.diagnosetype === 'similar' ||
-        interaction.service === 'onefirst')
-    );
+    let isExpected = false;
+
+    if (typeof buggyInteraction.input?.context?.term === 'object') {
+      isExpected =
+        interaction.userid === userId &&
+        interaction.input?.context?.term.length ===
+          buggyInteraction.input?.context?.term.length &&
+        interaction.input?.state?.prefix ===
+          buggyInteraction.input?.state?.prefix &&
+        interaction.input.state?.session ===
+          buggyInteraction.input?.state?.session &&
+        (interaction.output?.diagnose?.diagnosetype === 'expected' ||
+          interaction.output?.diagnose?.diagnosetype === 'similar');
+    } else {
+      isExpected =
+        interaction.userid === userId &&
+        interaction.input?.state?.prefix ===
+          buggyInteraction.input?.state?.prefix &&
+        interaction.input.state?.session ===
+          buggyInteraction.input?.state?.session &&
+        interaction.output?.diagnose?.state?.context?.term !==
+          formatLogicalFormula(initialFormula) &&
+        (interaction.output?.diagnose?.diagnosetype === 'expected' ||
+          interaction.output?.diagnose?.diagnosetype === 'similar' ||
+          (interaction.service === 'onefirst' && true));
+    }
+
+    return isExpected;
   });
 
   let expectedAnswer =
-    expectedInteraction?.output?.diagnose?.state?.context?.term;
+    expectedInteraction.service === 'onefirst'
+      ? expectedInteraction?.output?.onefirst?.first?.state?.context?.term
+      : expectedInteraction?.output?.diagnose?.state?.context?.term;
 
-  return formatLogicalFormula(expectedAnswer);
+  return expectedAnswer;
 };
 
 let filterBuggyAnsers = function (interactions) {
@@ -165,9 +195,10 @@ let didProvideBuggyAnswer = function (interaction) {
 
   if (isEmpty(interaction.output?.diagnose?.diagnosetype) === false) {
     return (
-      interaction.service === 'diagnose' &&
-      (interaction.output.diagnose.diagnosetype === 'buggy' ||
-        interaction.output.diagnose.diagnosetype === 'notequiv')
+      (interaction.service === 'diagnose' &&
+        interaction.output.diagnose.diagnosetype === 'buggy') ||
+      interaction.output.diagnose.diagnosetype === 'notequiv'
+      // || interaction.output.diagnose.diagnosetype === 'wrongrule'
     );
   }
 
@@ -202,8 +233,6 @@ export default class IndexRoute extends Route {
 
     let interactions = await this.store.findAll('interaction');
     let students = await this.store.findAll('student');
-
-    console.log(interactions);
 
     let groupData = students.map((student) => {
       let userId = student.userid;
@@ -258,16 +287,78 @@ export default class IndexRoute extends Route {
 
           // Previous mistakes.
           let errors = buggyAnswers.map((interaction) => {
-            let expectedAnswer = queryExpectedAnswer(interaction, interactions);
+            let initialFormula = interaction.input?.state?.context?.term;
+
+            if (typeof initialFormula === 'object') {
+              let oldGapPosition = interaction.input?.state?.context?.term
+                ?.map((term) => term.motivation)
+                .indexOf('<GAP>');
+
+              let newGapPosition = interaction.input?.context?.term
+                ?.map((term) => term.motivation)
+                .indexOf('<GAP>');
+
+              let isTopDownAnswer = newGapPosition > oldGapPosition;
+
+              initialFormula =
+                initialFormula[
+                  isTopDownAnswer === false
+                    ? oldGapPosition + 1
+                    : oldGapPosition - 1
+                ];
+            }
+
+            let providedAnswer = interaction.input?.context?.term;
+
+            if (typeof providedAnswer === 'object') {
+              let oldGapPosition = interaction.input?.state?.context?.term
+                ?.map((term) => term.motivation)
+                .indexOf('<GAP>');
+
+              let newGapPosition = interaction.input?.context?.term
+                ?.map((term) => term.motivation)
+                .indexOf('<GAP>');
+
+              let isTopDownAnswer = newGapPosition > oldGapPosition;
+
+              providedAnswer =
+                providedAnswer[
+                  isTopDownAnswer === false
+                    ? newGapPosition + 1
+                    : newGapPosition - 1
+                ];
+            }
+
+            let expectedAnswer = queryExpectedAnswer(
+              interaction,
+              interactions,
+              userId,
+              initialFormula
+            );
+
+            if (typeof expectedAnswer === 'object') {
+              let oldGapPosition = interaction.input?.state?.context?.term
+                ?.map((term) => term.motivation)
+                .indexOf('<GAP>');
+
+              let newGapPosition = interaction.input?.context?.term
+                ?.map((term) => term.motivation)
+                .indexOf('<GAP>');
+
+              let isTopDownAnswer = newGapPosition > oldGapPosition;
+
+              expectedAnswer =
+                expectedAnswer[
+                  isTopDownAnswer === false
+                    ? newGapPosition + 1
+                    : newGapPosition - 1
+                ];
+            }
 
             return {
-              initialFormula: formatLogicalFormula(
-                interaction.input.state.context.term
-              ),
-              providedAnswer: formatLogicalFormula(
-                interaction.input.context.term
-              ),
-              expectedAnswer,
+              initialFormula: formatLogicalFormula(initialFormula),
+              providedAnswer: formatLogicalFormula(providedAnswer),
+              expectedAnswer: formatLogicalFormula(expectedAnswer),
             };
           });
 
@@ -340,5 +431,9 @@ let calculateGroupAverage = function (knowledgeComponentTitle, groupData) {
 };
 
 let formatLogicalFormula = function (formula) {
-  return formula.replace(/([∨∧→↔])/g, ' $1 ');
+  if (typeof formula === 'object') {
+    return 'Object type';
+  }
+
+  return formula?.replace(/([∨∧→↔])/g, ' $1 ');
 };
