@@ -37,7 +37,7 @@ let queryInteractions = function ({
   return (
     [...interactions]
       // Sort by date descending.
-      .sort((a, b) => a.time < b.time)
+      .sort((a, b) => b.time - a.time)
       // Apply filter by timestamp.
       .filter((item) => item.time <= timestamp)
       // Apply filter by min. timestamp.
@@ -154,20 +154,20 @@ let queryExpectedAnswer = function (
         interaction.userid === userId &&
         interaction.input?.state?.prefix ===
           buggyInteraction.input?.state?.prefix &&
-        interaction.input.state?.session ===
+        interaction.input?.state?.session ===
           buggyInteraction.input?.state?.session &&
         interaction.output?.diagnose?.state?.context?.term !==
           formatLogicalFormula(initialFormula) &&
         (interaction.output?.diagnose?.diagnosetype === 'expected' ||
           interaction.output?.diagnose?.diagnosetype === 'similar' ||
-          (interaction.service === 'onefirst' && true));
+          interaction.service === 'onefirst');
     }
 
     return isExpected;
   });
 
   let expectedAnswer =
-    expectedInteraction.service === 'onefirst'
+    expectedInteraction?.service === 'onefirst'
       ? expectedInteraction?.output?.onefirst?.first?.state?.context?.term
       : expectedInteraction?.output?.diagnose?.state?.context?.term;
 
@@ -196,8 +196,8 @@ let didProvideBuggyAnswer = function (interaction) {
   if (isEmpty(interaction.output?.diagnose?.diagnosetype) === false) {
     return (
       (interaction.service === 'diagnose' &&
-        interaction.output.diagnose.diagnosetype === 'buggy') ||
-      interaction.output.diagnose.diagnosetype === 'notequiv'
+        interaction.output?.diagnose?.diagnosetype === 'buggy') ||
+      interaction.output?.diagnose?.diagnosetype === 'notequiv'
       // || interaction.output.diagnose.diagnosetype === 'wrongrule'
     );
   }
