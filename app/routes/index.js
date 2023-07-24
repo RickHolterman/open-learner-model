@@ -37,16 +37,18 @@ let queryInteractions = function ({
   return (
     [...interactions]
       // Sort by date descending.
-      .sort((a, b) => b.time - a.time)
+      .sort((a, b) => b.timeParsed - a.timeParsed)
       // Apply filter by timestamp.
-      .filter((item) => item.time <= timestamp)
+      .filter((item) => {
+        return item.timeParsed <= timestamp;
+      })
       // Apply filter by min. timestamp.
       .filter((item) =>
-        minTimestamp !== null ? item.time >= minTimestamp : true
+        minTimestamp !== null ? item.timeParsed >= minTimestamp : true
       )
       // Apply filter by max. timestamp.
       .filter((item) =>
-        maxTimestamp !== null ? item.time <= maxTimestamp : true
+        maxTimestamp !== null ? item.timeParsed <= maxTimestamp : true
       )
       // Apply filter by service types.
       .filter((item) => services.includes(item.service))
@@ -107,7 +109,7 @@ let queryRelatedInteractions = function ({
     })(),
     minTimestamp: (() => {
       if (diagnoseInteractions.length > 0) {
-        return plusOneLast[plusOneLast.length - 1].time;
+        return plusOneLast[plusOneLast.length - 1].timeParsed;
       }
 
       return null;
