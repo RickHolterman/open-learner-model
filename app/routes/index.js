@@ -227,6 +227,22 @@ let retrieveCurrentUserId = function () {
   return urlParams.get('user-id');
 };
 
+let parseTime = function (time) {
+  let split = time.split(/[- :.]/);
+
+  let tokenized = [
+    parseInt(split[0]),
+    parseInt(split[1]) - 1,
+    parseInt(split[2]),
+    parseInt(split[3]),
+    parseInt(split[4]),
+    parseInt(split[5]),
+    parseInt(parseFloat(`0.${split[6]}`) * 1000),
+  ];
+
+  return new Date(...tokenized);
+};
+
 export default class IndexRoute extends Route {
   @service store;
 
@@ -235,6 +251,60 @@ export default class IndexRoute extends Route {
 
     let interactions = await this.store.findAll('interaction');
     let students = await this.store.findAll('student');
+
+    let startTime = null;
+    let user = null;
+    let time = null;
+
+    // TODO: The following code is used to mock interaction dates, and should be removed in a production environment.
+    let inverseInteractions = interactions;
+    let interactionsWithMockedDates = inverseInteractions.map((interaction) => {
+      if (startTime === null) {
+        startTime = parseTime(interaction.time);
+      }
+
+      if (user === null) {
+        user = interaction.userid;
+      }
+
+      if (interaction.userid !== user) {
+        startTime = parseTime(interaction.time);
+        time = parseTime(interaction.time);
+        user = interaction.userid;
+      }
+
+      // console.log(user);
+
+      if (time === null) {
+        time = startTime;
+      } else {
+        time = subtractHours(time, 6);
+      }
+
+      let year = time.getFullYear();
+      let month = time.getMonth();
+      let day = time.getDate();
+      let hours = time.getHours();
+      let minutes = time.getMinutes();
+      let seconds = time.getSeconds();
+      let milliseconds = time.getMilliseconds();
+      let timeParsed = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}.${milliseconds}`;
+
+      interaction.time = timeParsed;
+
+      console.log(timeParsed, interaction.userid);
+
+      return interaction;
+    });
+
+    interactions = interactionsWithMockedDates;
+    // End of interactions dates mock.
+
+    function subtractHours(date, hours) {
+      date.setHours(date.getHours() - hours);
+
+      return date;
+    }
 
     let groupData = students.map((student) => {
       let userId = student.userid;
@@ -413,8 +483,15 @@ export default class IndexRoute extends Route {
       return knowledgeComponent;
     });
 
+    let currentUserTotalLevel = calculatePersonalTotal(currentUserLearnerData);
+
     return {
-      learnerData: { grid: { topics: combinedData } },
+      learnerData: {
+        grid: {
+          topics: combinedData,
+        },
+        currentUserTotalLevel,
+      },
       interactions: null,
     };
   }
@@ -429,6 +506,17 @@ let calculateGroupAverage = function (knowledgeComponentTitle, groupData) {
 
   return Math.round(
     progressLevels.reduce((sum, part) => sum + part, 0) / groupData.length
+  );
+};
+
+let calculatePersonalTotal = function (currentUserLearnerData) {
+  let progressLevels = currentUserLearnerData.map((knowledgeComponent) => {
+    return knowledgeComponent.progress.personal.totalLevel;
+  });
+
+  return Math.round(
+    progressLevels.reduce((sum, part) => sum + part, 0) /
+      currentUserLearnerData.length
   );
 };
 
