@@ -28,6 +28,7 @@ export default class IndexController extends Controller {
   @tracked activeId = null;
   @tracked activeTitle = null;
   @tracked isFiltersActive = false;
+  @tracked userId = null;
   @tracked selectedSortType = DEFAULT_SORT_TYPE;
   @tracked isPersonalProgressActive = DEFAULT_PERSONAL_PROGRESS_ACTIVE;
   @tracked isGroupProgressActive = DEFAULT_GROUP_PROGRESS_ACTIVE;

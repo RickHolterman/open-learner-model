@@ -6,7 +6,7 @@
     >
       <div class="flex flex-col justify-between max-w-screen-xl pt-20 mx-auto">
 
-        <header class="relative">
+        <header class="relative z-20">
           <div class="flex items-start justify-between px-8">
 
             <div class="flex flex-col gap-4">
@@ -171,7 +171,7 @@
                     <div
                       class="w-3 h-3 bg-green-600 rounded-full shadow-sm -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 absolute
                         {{if
-                          (eq this.selectedDateIndex (concat index))
+                          (eq (concat this.selectedDateIndex) (concat index))
                           'opacity-100'
                           'opacity-0'
                         }}"
@@ -181,7 +181,7 @@
                     <div
                       class="flex items-center absolute py-1 text-sm font-medium pr-1 text-white rounded-lg shadow-sm bg-opacity-60 bg-orange-400 backdrop-blur-lg left-1/2 -translate-x-1/2 mb-5
                         {{if
-                          (eq this.selectedDateIndex (concat index))
+                          (eq (concat this.selectedDateIndex) (concat index))
                           'opacity-0 group-hover/progress-section:opacity-100'
                           'opacity-0'
                         }}"
