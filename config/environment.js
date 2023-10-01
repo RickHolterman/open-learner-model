@@ -41,8 +41,7 @@ module.exports = function (environment) {
   }
 
   if (environment === 'production') {
-    ENV.rootURL = '/open-learner-model/';
-    ENV.baseURL = '/open-learner-model/';
+    ENV.baseURL = '/open-learner-model';
     // ENV.locationType = 'hash';
     ENV['ember-cli-mirage'] = {
       enabled: true,
