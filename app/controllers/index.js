@@ -16,19 +16,20 @@ const DEFAULT_PERSONAL_PROGRESS_ACTIVE = true;
 const DEFAULT_GROUP_PROGRESS_ACTIVE = false;
 const DEFAULT_BUGGY_ANSWERS_ACTIVE = false;
 const DEFAULT_SIDE_PANEL_DETAILS_OPEN = ['progress'];
+const DEFAULT_USER_ID = 'medium-scoring';
 
 export default class IndexController extends Controller {
   @tracked data = null;
   @tracked startDate = null;
   @tracked endDate = null;
   @tracked dates = null;
-  @tracked selectedDateIndex = null;
+  @tracked selectedDateIndex = 1000;
   @tracked maxSelectedDateIndex = null;
   @tracked isSidePanelActive = false;
   @tracked activeId = null;
   @tracked activeTitle = null;
   @tracked isFiltersActive = false;
-  @tracked userId = null;
+  @tracked userId = DEFAULT_USER_ID;
   @tracked selectedSortType = DEFAULT_SORT_TYPE;
   @tracked isPersonalProgressActive = DEFAULT_PERSONAL_PROGRESS_ACTIVE;
   @tracked isGroupProgressActive = DEFAULT_GROUP_PROGRESS_ACTIVE;
