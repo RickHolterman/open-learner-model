@@ -11,13 +11,13 @@ export default class SidePanelComponent extends Component {
     return this.args.activeKnowledgeComponent;
   }
 
-  get anweringCorrectlyMessage() {
+  get answeringCorrectlyMessage() {
     if (isEmpty(this.topic) === true) {
       return '';
     }
 
     if (this.topic.progress.personal.practicingLevel === 0) {
-      return `You haven't anwered any ${this.topic.title} related questions yet. Provide correct answers in situations that require applying this rule to improve your score.`;
+      return `You haven't answered any ${this.topic.title} related questions yet. Provide correct answers in situations that require applying this rule to improve your score.`;
     }
 
     return `You provided the correct answer
@@ -28,10 +28,9 @@ export default class SidePanelComponent extends Component {
       ${
         this.topic.interactionsCap >=
         this.topic.progress.totalDiagnoseInteractions
-          ? ' in total, '
-          : ` during your last ${this.topic.interactionsCap} attempts, `
+          ? ' in total, when attempting to apply '
+          : ` during your last ${this.topic.interactionsCap} attempts to apply `
       }
-      in situations where you needed to apply
       ${this.topic.title}.
       `;
   }
@@ -94,7 +93,7 @@ export default class SidePanelComponent extends Component {
         this.topic.interactionsCap
     ) {
       message +=
-        'Maintain your score by anwering questions without using hints. ';
+        'Maintain your score by answering questions without using hints. ';
     }
     if (this.topic.progress.personal.requestedHintsLevel !== 100) {
       message += 'Use less hints to improve your score.';

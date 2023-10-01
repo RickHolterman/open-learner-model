@@ -170,7 +170,29 @@ const RULES = {
   ],
 };
 
-export { RULES };
+const RULE_NAMES = {
+  ASSOCIATIVITY: 'Associativity',
+  ABSORPTION: 'Absorption',
+  COMMUTATIVITY: 'Commutativity',
+  DE_MORGAN: 'De Morgan',
+  DISTRIBUTION: 'Distribution',
+  DOUBLE_NEGATION: 'Double Negation',
+  EQUIVALENCE_DEFINITION: 'Equivalence definition',
+  F_RULES: 'F-rules',
+  F_RULE_COMPLEMENT: 'F-rule complement',
+  F_RULE_CONJUNCTION: 'F-rule conjunction',
+  F_RULE_DISJUNCTION: 'F-rule disjunction',
+  F_RULE_NOT_T: 'F-rule not T',
+  IDEMPOTENCY: 'Idempotency',
+  IMPLICATION_DEFINITION: 'Implication definition',
+  T_RULES: 'T-rules',
+  T_RULE_COMPLEMENT: 'T-rule complement',
+  T_RULE_CONJUNCTION: 'T-rule conjunction',
+  T_RULE_DISJUNCTION: 'T-rule disjunction',
+  T_RULE_NOT_F: 'T-rule not F',
+};
+
+export { RULES, RULE_NAMES };
 
 /*
   'logic.propositional.buggy.falseprop',

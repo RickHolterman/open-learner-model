@@ -11,7 +11,7 @@
     {{unless @isActive 'translate-x-[500px]'}}"
   {{did-update this.didUpdateDetailsOpen @detailsOpen}}
 >
-  <div class="h-full pt-20 mx-9">
+  <div class="flex flex-col h-full pt-20 mx-9">
 
     {{! Close button. }}
     <button
@@ -34,71 +34,76 @@
       {{@activeKnowledgeComponent.title}}
     </h2>
 
-    <div
-      class="h-[calc(100%_-_6rem)] overflow-scroll flex flex-col gap-6 mt-10 pb-10"
-    >
-      <details class="group" data-section-type="progress">
-        <summary
-          class="flex items-center justify-between pb-6 overflow-hidden border-b border-white cursor-pointer group-open:border-none group-open:pb-0"
-        >
-          <h3 class="text-base font-medium">Knowlegde level</h3>
-          <span
-            class="w-6 h-6 text-lg text-gray-800 transition-transform duration-200 -rotate-45 group-open:rotate-0"
+    {{#if @activeKnowledgeComponent.description}}
+      <div class="pb-6 mb-4 mr-10 -mt-2 text-sm font-thin text-gray-700">
+        {{@activeKnowledgeComponent.description}}
+      </div>
+    {{/if}}
+
+    <div class="flex-1 overflow-scroll">
+      <div class="flex flex-col gap-6 pb-10 mt-10 min-h-max">
+        <details class="group" data-section-type="progress">
+          <summary
+            class="flex items-center justify-between pb-6 overflow-hidden border-b border-white cursor-pointer group-open:border-none group-open:pb-0"
           >
-            {{svg-jar "cross"}}
-          </span>
-        </summary>
-        <div class="px-6 py-8 mt-4 mb-4 bg-white rounded-md bg-opacity-80">
-          <ProgressBar
-            @title="Personal progress"
-            @progress={{@activeKnowledgeComponent.progress.personal.totalLevel}}
-            @activeColor="green"
-          />
+            <h3 class="text-base font-medium">Knowledge level</h3>
+            <span
+              class="w-6 h-6 text-lg text-gray-800 transition-transform duration-200 -rotate-45 group-open:rotate-0"
+            >
+              {{svg-jar "cross"}}
+            </span>
+          </summary>
+          <div class="px-6 py-8 mt-4 mb-4 bg-white rounded-md bg-opacity-60">
+            <ProgressBar
+              @title="Personal progress"
+              @progress={{@activeKnowledgeComponent.progress.personal.totalLevel}}
+              @activeColor="green"
+            />
 
-          <ProgressBar
-            @title="Class average"
-            @progress={{@activeKnowledgeComponent.progress.group.totalLevel}}
-            @activeColor="blue"
-            class="mt-8"
-          />
-        </div>
-      </details>
+            <ProgressBar
+              @title="Class average"
+              @progress={{@activeKnowledgeComponent.progress.group.totalLevel}}
+              @activeColor="blue"
+              class="mt-8"
+            />
+          </div>
+        </details>
 
-      <details class="group" data-section-type="improvement-details">
-        <summary
-          class="flex items-center justify-between pb-6 overflow-hidden border-b border-white cursor-pointer group-open:border-none group-open:pb-0"
-        >
-          <h3 class="text-base font-medium">How to improve?</h3>
-          <span
-            class="w-6 h-6 text-lg text-gray-800 transition-transform duration-200 -rotate-45 group-open:rotate-0"
+        <details class="group" data-section-type="improvement-details">
+          <summary
+            class="flex items-center justify-between pb-6 overflow-hidden border-b border-white cursor-pointer group-open:border-none group-open:pb-0"
           >
-            {{svg-jar "cross"}}
-          </span>
-        </summary>
+            <h3 class="text-base font-medium">How to improve?</h3>
+            <span
+              class="w-6 h-6 text-lg text-gray-800 transition-transform duration-200 -rotate-45 group-open:rotate-0"
+            >
+              {{svg-jar "cross"}}
+            </span>
+          </summary>
 
-        <div class="px-6 py-8 mt-4 mb-4 bg-white rounded-md bg-opacity-80">
-          <ProgressBar
-            @title="Anwering correctly"
-            @titleSuffix={{concat
-              "(last "
-              @activeKnowledgeComponent.interactionsCap
-              " attempts)"
-            }}
-            @subtitle={{this.anweringCorrectlyMessage}}
-            @progress={{@activeKnowledgeComponent.progress.personal.answeringCorrectlyLevel}}
-            @activeColor="green"
-          />
+          <div class="px-6 py-8 mt-4 mb-4 bg-white rounded-md bg-opacity-60">
+            <ProgressBar
+              @title="Answering correctly"
+              @titleSuffix={{concat
+                "(last "
+                @activeKnowledgeComponent.interactionsCap
+                " attempts)"
+              }}
+              @subtitle={{this.answeringCorrectlyMessage}}
+              @progress={{@activeKnowledgeComponent.progress.personal.answeringCorrectlyLevel}}
+              @activeColor="green"
+            />
 
-          <ProgressBar
-            @title="Hints used"
-            @titleSuffix="(last 5 attempts)"
-            @subtitle={{this.requestedHintsMessage}}
-            @progress={{@activeKnowledgeComponent.progress.personal.requestedHintsLevel}}
-            @activeColor="green"
-            class="mt-8"
-          />
+            <ProgressBar
+              @title="Hints used"
+              @titleSuffix="(last 5 attempts)"
+              @subtitle={{this.requestedHintsMessage}}
+              @progress={{@activeKnowledgeComponent.progress.personal.requestedHintsLevel}}
+              @activeColor="green"
+              class="mt-8"
+            />
 
-          {{!-- <ProgressBar
+            {{!-- <ProgressBar
             @title="Viewed solution"
             @titleSuffix="(last 5 attempts)"
             @subtitle={{concat
@@ -137,123 +142,143 @@
             class="mt-8"
           /> --}}
 
-          <ProgressBar
-            @title="Practicing"
-            @subtitle={{concat
-              "Practice with applying "
-              @activeKnowledgeComponent.title
-              " by yourself at least "
-              @activeKnowledgeComponent.interactionsCap
-              " times to get a 100% score."
-            }}
-            @progress={{@activeKnowledgeComponent.progress.personal.practicingLevel}}
-            @activeColor="green"
-            class="mt-8"
-          />
-        </div>
-      </details>
+            <ProgressBar
+              @title="Practicing"
+              @subtitle={{concat
+                "Practice with applying "
+                @activeKnowledgeComponent.title
+                " by yourself at least "
+                @activeKnowledgeComponent.interactionsCap
+                " times to get a 100% score."
+              }}
+              @progress={{@activeKnowledgeComponent.progress.personal.practicingLevel}}
+              @activeColor="green"
+              class="mt-8"
+            />
+          </div>
+        </details>
 
-      <details class="group" data-section-type="mistakes">
-        <summary
-          class="flex items-center justify-between pb-6 overflow-hidden border-b border-white cursor-pointer group-open:border-none group-open:pb-0"
-        >
-          <h3 class="text-base font-medium">Previous mistakes</h3>
-          <span
-            class="w-6 h-6 text-lg text-gray-800 transition-transform duration-200 -rotate-45 group-open:rotate-0"
+        <details class="group" data-section-type="mistakes">
+          <summary
+            class="flex items-center justify-between pb-6 overflow-hidden border-b border-white cursor-pointer group-open:border-none group-open:pb-0"
           >
-            {{svg-jar "cross"}}
-          </span>
-        </summary>
+            <h3 class="text-base font-medium">Previous mistakes</h3>
+            <span
+              class="w-6 h-6 text-lg text-gray-800 transition-transform duration-200 -rotate-45 group-open:rotate-0"
+            >
+              {{svg-jar "cross"}}
+            </span>
+          </summary>
 
-        <span
-          class="flex flex-col mt-4 mb-4 mr-10 text-sm font-thin text-gray-700"
-        >
-          <span class="inline">
-            You made a mistake
-            <div
-              class="inline-block font-light rounded-lg px-2 py-0.5 transition-colors
-                {{if
+          <span
+            class="flex flex-col mt-4 mb-4 mr-10 text-sm font-thin text-gray-700"
+          >
+            <span class="inline">
+              You made
+              <div
+                class="inline-block font-light rounded-lg px-2 py-0.5 transition-colors
+                  {{if
+                    (eq
+                      @activeKnowledgeComponent.progress.personal.buggyAnswersAmount
+                      0
+                    )
+                    'bg-green-500 text-white'
+                    'bg-red-400 text-white'
+                  }}"
+              >
+                {{@activeKnowledgeComponent.progress.personal.buggyAnswersAmount}}
+                mistake{{#unless
                   (eq
                     @activeKnowledgeComponent.progress.personal.buggyAnswersAmount
-                    0
+                    1
                   )
-                  'bg-green-500 text-white'
-                  'bg-red-400 text-white'
-                }}"
-            >
-              {{@activeKnowledgeComponent.progress.personal.buggyAnswersAmount}}
-              out of 5
-            </div>
-            {{"  "}}
-            times, the last five times you applied this rule.
-            {{#if
-              (eq
-                @activeKnowledgeComponent.progress.personal.buggyAnswersAmount 0
-              )
-            }}
-              Any future mistakes made will be displayed here.
-            {{/if}}
+                }}s{{/unless}}
+              </div>
+              {{"  "}}
+              during the last five times you attempted to apply
+              {{@activeKnowledgeComponent.title}}.
+              {{#if
+                (eq
+                  @activeKnowledgeComponent.progress.personal.buggyAnswersAmount
+                  0
+                )
+              }}
+                Any future mistakes made will be displayed here.
+              {{/if}}
+            </span>
           </span>
-        </span>
 
-        {{#each @activeKnowledgeComponent.errors as |error index|}}
-          <div
-            class="relative flex flex-col gap-6 px-6 py-8 mt-8 text-sm font-medium bg-white rounded-md bg-opacity-80"
-          >
+          {{#each @activeKnowledgeComponent.errors as |error index|}}
             <div
-              class="max-w-max absolute right-4 font-normal top-0 rounded-lg px-2 py-0.5 -translate-y-3 transition-colors bg-gray-100 shadow-sm text-gray-600"
+              class="relative flex flex-col gap-6 px-6 py-8 mt-8 text-sm font-medium bg-white rounded-md bg-opacity-60"
             >
-              Mistake
-              {{sum index 1}}
+              <div
+                class="max-w-max absolute right-4 font-normal top-0 rounded-lg px-2 py-0.5 -translate-y-3 transition-colors bg-gray-100 shadow-sm text-gray-600"
+              >
+                Mistake
+                {{sum index 1}}
+              </div>
+
+              <span class="flex flex-col gap-2">
+                Initial formula
+                <span
+                  class="relative p-4 pl-5 overflow-hidden font-serif text-base italic rounded-md text-amber-700 bg-amber-100"
+                >
+                  <div class="-translate-y-px">
+                    {{error.initialFormula}}
+                  </div>
+                  <div
+                    class="absolute top-0 left-0 w-1 h-full bg-transparent"
+                  ></div>
+                </span>
+              </span>
+
+              <span class="flex flex-col gap-2">
+                Your attempt to apply
+                {{error.rule}}
+
+                <span
+                  class="relative p-4 pl-5 overflow-hidden font-serif text-base italic rounded-md text-amber-700 bg-amber-100"
+                >
+                  <div class="-translate-y-px">
+                    {{error.providedAnswer}}
+                  </div>
+                  <div
+                    class="absolute top-0 left-0 w-1 h-full bg-red-400"
+                  ></div>
+                </span>
+
+              </span>
+
+              {{#if error.expectedAnswer}}
+                <span class="flex flex-col gap-2">
+                  Expected answer after applying
+                  {{error.rule}}
+
+                  <span
+                    class="relative p-4 pl-5 overflow-hidden font-serif text-base italic rounded-md text-amber-700 bg-amber-100"
+                  >
+                    <div class="-translate-y-px">
+                      {{error.expectedAnswer}}
+                    </div>
+                    <div
+                      class="absolute top-0 left-0 w-1 h-full bg-green-500"
+                    ></div>
+                  </span>
+                </span>
+              {{else}}
+                {{log @activeKnowledgeComponent}}
+                <div class="mr-5 text-sm font-thin text-gray-700">
+                  This is not a correct application of
+                  {{error.rule}}, and the two formulas are not equivalent. Can
+                  you think of an alternative for rewriting the initial formula?
+                </div>
+              {{/if}}
             </div>
-
-            <span class="flex flex-col gap-2">
-              Initial formula
-              <span
-                class="relative p-4 pl-5 overflow-hidden font-serif text-base italic rounded-md text-amber-700 bg-amber-100"
-              >
-                <div class="-translate-y-px">
-                  {{error.initialFormula}}
-                </div>
-                <div
-                  class="absolute top-0 left-0 w-1 h-full bg-transparent"
-                ></div>
-              </span>
-            </span>
-
-            <span class="flex flex-col gap-2">
-              Your attempt to apply
-              {{@activeKnowledgeComponent.title}}
-
-              <span
-                class="relative p-4 pl-5 overflow-hidden font-serif text-base italic rounded-md text-amber-700 bg-amber-100"
-              >
-                <div class="-translate-y-px">
-                  {{error.providedAnswer}}
-                </div>
-                <div class="absolute top-0 left-0 w-1 h-full bg-red-400"></div>
-              </span>
-
-            </span>
-
-            <span class="flex flex-col gap-2">
-              Expected answer after applying
-              {{@activeKnowledgeComponent.title}}
-
-              <span
-                class="relative p-4 pl-5 overflow-hidden font-serif text-base italic rounded-md text-amber-700 bg-amber-100"
-              >
-                <div class="-translate-y-px">
-                  {{error.expectedAnswer}}
-                </div>
-                <div
-                  class="absolute top-0 left-0 w-1 h-full bg-green-500"
-                ></div>
-              </span>
-            </span>
-          </div>
-        {{/each}}
-      </details>
+          {{/each}}
+        </details>
+      </div>
     </div>
+
   </div>
 </aside>

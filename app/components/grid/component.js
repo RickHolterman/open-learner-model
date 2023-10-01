@@ -38,12 +38,15 @@ export default class GridComponent extends Component {
   }
 
   @action
-  handleCellClick(id, progressType) {
-    if (this.args.isSidePanelOpen === true && id === this.activeIdSidePanel) {
+  handleCellClick(id, title, progressType) {
+    if (
+      this.args.isSidePanelOpen === true &&
+      title === this.activeIdSidePanel
+    ) {
       this.args.closeSidePanel(id);
     } else {
-      this.activeIdSidePanel = id;
-      this.args.openSidePanel(id, progressType);
+      this.activeIdSidePanel = title;
+      this.args.openSidePanel(id, title, progressType);
     }
   }
 
