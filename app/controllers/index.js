@@ -196,6 +196,10 @@ export default class IndexController extends Controller {
   }
 
   formatDate = (date) => {
+    if (isEmpty(date) === true) {
+      return '';
+    }
+
     let ymd = date.split('-');
 
     return `${ymd[2]}-${ymd[1]}-${ymd[0]}`;
