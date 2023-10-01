@@ -42,7 +42,7 @@ module.exports = function (environment) {
 
   if (environment === 'production') {
     // ENV.rootURL = 'https://rickholterman.github.io/open-learner-model/';
-    // ENV.baseURL = '/open-learner-model';
+    ENV.baseURL = '/open-learner-model';
     ENV.locationType = 'history';
     ENV['ember-cli-mirage'] = {
       enabled: true,
