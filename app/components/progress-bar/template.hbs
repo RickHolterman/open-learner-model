@@ -1,5 +1,5 @@
 <div class="flex items-end justify-between gap-2" ...attributes>
-  <span class="flex flex-col text-sm font-medium">
+  <span class="flex flex-col text-sm leading-normal font-medium">
     <span class="flex items-center h-6 gap-x-1">
       {{@title}}
 
@@ -18,12 +18,14 @@
     {{/if}}
   </span>
   <div
-    class="flex justify-end text-sm rounded-lg px-2 py-0.5 transition-colors
+    class="flex justify-end text-sm leading-normal rounded-lg px-2 py-0.5 transition-colors
       {{if
         (eq @progress 100)
         (or
           (if (eq @activeColor 'green') 'bg-green-500 text-white font-medium')
           (if (eq @activeColor 'blue') 'bg-blue-500 font-medium text-white')
+          (if (eq @activeColor 'yellow') 'bg-yellow-500 font-medium text-white')
+          (if (eq @activeColor 'red') 'bg-red-400 font-medium text-white')
         )
         (or
           (if
@@ -45,6 +47,8 @@
     class="h-full
       {{if (eq @useTransition false) '' 'transition-all duration-300'}}
       {{if (eq @activeColor 'green') 'bg-green-500'}}
-      {{if (eq @activeColor 'blue') 'bg-blue-500'}}"
+      {{if (eq @activeColor 'blue') 'bg-blue-500'}}
+      {{if (eq @activeColor 'yellow') 'bg-yellow-500/80'}}
+      {{if (eq @activeColor 'red') 'bg-red-400 font-medium'}}"
   ></div>
 </div>

@@ -22,15 +22,13 @@ export default class SidePanelComponent extends Component {
 
     return `You provided the correct answer
       ${this.topic.progress.personal.answeringCorrectlyAmount}
-      out of
-      ${this.topic.progress.totalDiagnoseInteractions}
       ${this.timesStringPluralized}
-      ${
-        this.topic.interactionsCap >=
-        this.topic.progress.totalDiagnoseInteractions
-          ? ' in total, when attempting to apply '
-          : ` during your last ${this.topic.interactionsCap} attempts to apply `
-      }
+      out of your ${
+        this.topic.progress.totalDiagnoseInteractions <
+        this.topic.interactionsCap
+          ? 'total of'
+          : 'last'
+      } ${this.topic.progress.totalDiagnoseInteractions} attempts to apply
       ${this.topic.title}.
       `;
   }
@@ -72,19 +70,14 @@ export default class SidePanelComponent extends Component {
       this.topic.progress.totalDiagnoseInteractions > 0 &&
       this.topic.progress.personal.requestedHintsAmount === 0
     ) {
-      message = `You haven't requested any hints in situations where you needed to apply
-      ${this.topic.title} in your last attempts. `;
+      message = `You haven't recently requested any hints in situations where you needed to apply
+      ${this.topic.title}. `;
     }
     if (
       this.topic.progress.totalDiagnoseInteractions === 0 &&
       this.topic.progress.personal.requestedHintsAmount === 0
     ) {
       return `Try not using any hints in situations where you need to apply ${this.topic.title} to improve your score. Your score will update as you practice with ${this.topic.title} more. `;
-    }
-
-    if (this.topic.progress.personal.requestedHintsAmount === 0) {
-      message = `You haven't requested any hints in situations where you needed to apply
-      ${this.topic.title}. `;
     }
 
     if (
@@ -105,7 +98,7 @@ export default class SidePanelComponent extends Component {
   get timesStringPluralized() {
     return `${pluralize(
       'time',
-      this.topic.progress.totalDiagnoseInteractions
+      this.topic.progress.personal.answeringCorrectlyAmount
     )}`;
   }
 

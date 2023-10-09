@@ -67,9 +67,24 @@ export default class FiltersComponent extends Component {
     return this.args.toggleBuggyAnswersActive();
   }
 
+  @action
+  toggleTopicExposureActive() {
+    if (isEmpty(this.args.toggleTopicExposureActive) === true) {
+      return;
+    }
+
+    return this.args.toggleTopicExposureActive();
+  }
+
   sortOptions = [
-    { value: SORT_TYPE.PERSONAL_ASC, label: 'Personal progress - ascending' },
-    { value: SORT_TYPE.PERSONAL_DESC, label: 'Personal progress - descending' },
+    {
+      value: SORT_TYPE.PERSONAL_ASC,
+      label: 'Personal skill level - ascending',
+    },
+    {
+      value: SORT_TYPE.PERSONAL_DESC,
+      label: 'Personal skill level - descending',
+    },
     { value: SORT_TYPE.GROUP_ASC, label: 'Class average - ascending' },
     { value: SORT_TYPE.GROUP_DESC, label: 'Class average - descending' },
     { value: SORT_TYPE.ALPHABETICAL, label: 'Alphabetical' },

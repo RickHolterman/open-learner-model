@@ -6,7 +6,7 @@
     >
       <div class="flex flex-col justify-between max-w-screen-xl pt-20 mx-auto">
 
-        <header class="relative z-20">
+        <header class="relative z-30">
           <div class="flex items-start justify-between px-8">
 
             <div class="flex flex-col gap-4">
@@ -26,7 +26,7 @@
 
             <button
               type="button"
-              class="relative z-20 flex items-center gap-3 py-2 pl-5 pr-3.5 text-sm font-medium text-white rounded-full bg-slate-700 text"
+              class="relative z-20 flex items-center gap-3 py-2 pl-5 pr-3.5 text-sm leading-normal font-medium text-white rounded-full bg-slate-700 text"
               {{on "click" this.toggleFiltersIsActive}}
             >
               Filters
@@ -50,6 +50,8 @@
               @isGroupProgressActive={{this.isGroupProgressActive}}
               @toggleBuggyAnswersActive={{this.toggleBuggyAnswersActive}}
               @isBuggyAnswersActive={{this.isBuggyAnswersActive}}
+              @isTopicExposureActive={{this.isTopicExposureActive}}
+              @toggleTopicExposureActive={{this.toggleTopicExposureActive}}
               @reset={{this.resetFilters}}
             />
           </div>
@@ -66,6 +68,7 @@
             @isPersonalProgressActive={{this.isPersonalProgressActive}}
             @isGroupProgressActive={{this.isGroupProgressActive}}
             @isBuggyAnswersActive={{this.isBuggyAnswersActive}}
+            @isTopicExposureActive={{this.isTopicExposureActive}}
           />
         </div>
 
@@ -77,7 +80,7 @@
               <label for="time" class="px-2.5">Your progress over time</label>
               <button
                 type="button"
-                class="text-sm font-medium text-red-700 underline transition-opacity duration-200
+                class="text-sm leading-normal font-medium text-red-700 underline transition-opacity duration-200
                   {{if
                     (eq
                       this.selectedDate
@@ -179,7 +182,7 @@
                     </div>
 
                     <div
-                      class="flex items-center absolute py-1 text-sm font-medium pr-1 text-white rounded-lg shadow-sm bg-opacity-60 bg-orange-400 backdrop-blur-lg left-1/2 -translate-x-1/2 mb-5
+                      class="flex items-center absolute py-1 text-sm leading-normal font-medium pr-1 text-white rounded-lg shadow-sm bg-opacity-60 bg-orange-400 backdrop-blur-lg left-1/2 -translate-x-1/2 mb-5
                         {{if
                           (eq (concat this.selectedDateIndex) (concat index))
                           'opacity-0 group-hover/progress-section:opacity-100'

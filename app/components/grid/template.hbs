@@ -5,7 +5,7 @@
   class="mb-5"
 >
   <div class="flex flex-row gap-1 mt-36">
-    <div class="flex-shrink-0 w-16 mr-3"></div>
+    <div class="flex-shrink-0 w-20 mr-3"></div>
     {{#each @topics as |topic|}}
       <div
         class="relative flex flex-col w-12 transition-all
@@ -31,9 +31,13 @@
       }}"
   >
     <div
-      class="flex items-center flex-shrink-0 w-16 text-xs font-medium leading-tight text-gray-700"
+      class="flex items-center flex-shrink-0 w-20 text-xs font-medium leading-tight text-gray-700"
     >
-      personal skill level
+      <div>
+        personal
+        <br />skill level
+        <span class="font-light">(%)</span>
+      </div>
     </div>
 
     <div class="flex flex-row gap-1">
@@ -51,6 +55,7 @@
             (eq topic.title this.activeIdSidePanel)
             @isSidePanelOpen
           }}
+          @isUnstarted={{eq topic.progress.personal.practicingLevel 0}}
           class="transition-opacity
             {{if
               (and @isSidePanelOpen (not-eq topic.title this.activeIdSidePanel))
@@ -67,9 +72,12 @@
       {{if @isGroupProgressActive 'h-12' 'h-0 pointer-events-none opacity-0'}}"
   >
     <div
-      class="flex items-center flex-shrink-0 w-16 text-xs font-medium leading-tight text-gray-700"
+      class="flex items-center flex-shrink-0 w-20 text-xs font-medium leading-tight text-gray-700"
     >
-      class average
+      <div>
+        class<br />average
+        <span class="font-light">(%)</span>
+      </div>
     </div>
 
     <div class="flex flex-row gap-1">
@@ -103,9 +111,12 @@
       {{if @isBuggyAnswersActive 'h-12' 'h-0 pointer-events-none opacity-0'}}"
   >
     <div
-      class="flex items-center flex-shrink-0 w-16 text-xs font-medium leading-tight text-gray-700"
+      class="flex items-center flex-shrink-0 w-20 text-xs font-medium leading-tight text-gray-700"
     >
-      errors last 5 attempts
+      <div>
+        recent<br />errors
+        <span class="font-light">(#)</span>
+      </div>
     </div>
 
     <div class="flex flex-row gap-1">
@@ -127,6 +138,50 @@
             (eq topic.title this.activeIdSidePanel)
             @isSidePanelOpen
           }}
+          @isUnstarted={{eq topic.progress.personal.practicingLevel 0}}
+          class="transition-opacity
+            {{if
+              (and @isSidePanelOpen (not-eq topic.title this.activeIdSidePanel))
+              ' opacity-30'
+              ''
+            }}"
+        />
+      {{/each}}
+    </div>
+  </div>
+
+  <div
+    class="flex flex-row gap-4 mt-1 transition-all duration-300 ease-in-out
+      {{if @isTopicExposureActive 'h-12' 'h-0 pointer-events-none opacity-0'}}"
+  >
+    <div
+      class="flex items-center flex-shrink-0 w-20 text-xs font-medium leading-tight text-gray-700"
+    >
+      <div>
+        topic under-
+        <br />exposure
+        <span class="font-light">(%)</span>
+      </div>
+    </div>
+
+    <div class="flex flex-row gap-1">
+      {{#each @topics as |topic|}}
+        <GridCell
+          @id={{topic.id}}
+          @title={{topic.title}}
+          @progressType="topic-exposure"
+          @progress={{this.substract
+            100
+            topic.progress.personal.practicingLevel
+          }}
+          @backgroundColor="bg-yellow-400"
+          @handleCellClick={{this.handleCellClick}}
+          @handleCellMouseEnter={{this.handleCellMouseEnter}}
+          @handleCellMouseLeave={{this.handleCellMouseLeave}}
+          @isActive={{and
+            (eq topic.title this.activeIdSidePanel)
+            @isSidePanelOpen
+          }}
           class="transition-opacity
             {{if
               (and @isSidePanelOpen (not-eq topic.title this.activeIdSidePanel))
@@ -141,63 +196,178 @@
 
 <div id="tooltip" class="z-20 transition-all pointer-events-none">
   <div
-    class="mx-6 my-2 transition-opacity duration-300 opacity-0 backdrop-blur-3xl"
+    class="mx-6 my-2 transition-opacity duration-300 rounded-lg opacity-0 backdrop-blur-3xl"
   >
     <article
-      class="py-8 bg-white rounded-lg shadow-lg bg-opacity-40 px-7 w-96"
+      class="pb-8 bg-white rounded-lg shadow-lg pt-7 bg-opacity-60 px-7 w-96"
       ...attributes
     >
-      <h2
-        class="font-medium text-gray-700"
-      >{{this.activeKnowledgeComponent.title}}</h2>
+      <header class="flex items-center justify-between">
+        <h2 class="font-medium text-gray-700">
+          {{this.activeKnowledgeComponent.title}}
+        </h2>
 
-      <div class="mt-8">
+      </header>
+
+      {{#if
+        (eq this.activeKnowledgeComponent.progress.personal.practicingLevel 0)
+      }}
+        {{#if
+          (or
+            (eq this.activeProgressType "personal")
+            (eq this.activeProgressType "mistakes")
+          )
+        }}
+          <div class="flex items-center justify-start gap-1 mt-6">
+            <span class="flex flex-col text-sm font-medium leading-normal">
+              This is an
+            </span>
+            <div
+              class="flex justify-end text-sm leading-normal font-light rounded-lg px-2 py-0.5 transition-colors max-w-max flex-shrink-0 bg-yellow-500 text-white"
+            >
+              Unstarted topic
+            </div>
+          </div>
+          <span
+            class="block mt-1 mr-10 text-sm font-thin leading-normal text-gray-700"
+          >
+            You have not been exposed to situations that required you to apply
+            this rule yet.
+          </span>
+        {{/if}}
+      {{/if}}
+
+      <div>
         {{#if (eq this.activeProgressType "mistakes")}}
-          <div class="flex items-end justify-between gap-2">
-            <span class="flex flex-col text-sm font-medium">
-              <span class="flex items-center h-6 gap-x-1">
-                You made
-                <div
-                  class="flex justify-end text-sm font-light rounded-lg px-2 py-0.5 transition-colors flex-shrink-0
-                    {{if
-                      (eq
-                        this.activeKnowledgeComponent.progress.personal.buggyAnswersAmount
+          {{#if
+            (gt
+              this.activeKnowledgeComponent.progress.personal.practicingLevel 0
+            )
+          }}
+            <div class="flex items-end justify-between gap-2 mt-6">
+              <span class="flex flex-col text-sm font-medium leading-normal">
+
+                <span class="flex items-center h-6 gap-x-1">
+                  {{#if
+                    (gt
+                      this.activeKnowledgeComponent.progress.personal.practicingLevel
+                      0
+                    )
+                  }}
+                    You made
+                  {{/if}}
+                  <div
+                    class="flex justify-end text-sm leading-normal font-light rounded-lg px-2 py-0.5 transition-colors flex-shrink-0
+                      {{if
+                        (and
+                          (eq
+                            this.activeKnowledgeComponent.progress.personal.buggyAnswersAmount
+                            0
+                          )
+                          (eq
+                            this.activeKnowledgeComponent.progress.personal.practicingLevel
+                            0
+                          )
+                        )
+                        'bg-yellow-400 text-white'
+                        (if
+                          (eq
+                            this.activeKnowledgeComponent.progress.personal.buggyAnswersAmount
+                            0
+                          )
+                          'bg-green-500 text-white'
+                          'bg-red-400 text-white'
+                        )
+                      }}"
+                  >
+                    {{#if
+                      (gt
+                        this.activeKnowledgeComponent.progress.personal.practicingLevel
                         0
                       )
-                      'bg-green-500 text-white'
-                      'bg-red-400 text-white'
-                    }}"
-                >
-                  {{this.activeKnowledgeComponent.progress.personal.buggyAnswersAmount}}
-                  mistake{{#unless
-                    (eq
-                      this.activeKnowledgeComponent.progress.personal.buggyAnswersAmount
-                      1
+                    }}
+                      {{this.activeKnowledgeComponent.progress.personal.buggyAnswersAmount}}
+                      mistake{{#unless
+                        (eq
+                          this.activeKnowledgeComponent.progress.personal.buggyAnswersAmount
+                          1
+                        )
+                      }}s{{/unless}}
+                    {{/if}}
+                  </div>
+                </span>
+
+                <span class="block mt-1 mr-10 font-thin text-gray-700">
+                  {{#if
+                    (lt
+                      this.activeKnowledgeComponent.progress.totalDiagnoseInteractions
+                      this.activeKnowledgeComponent.interactionsCap
                     )
-                  }}s{{/unless}}
-                </div>
+                  }}
+                    during your total of
+                    {{this.activeKnowledgeComponent.progress.totalDiagnoseInteractions}}
+                    attempts to apply
+                  {{else}}
+                    during the last five times you attempted to apply
+                  {{/if}}
+                  {{this.activeKnowledgeComponent.title}}.
+                </span>
               </span>
-              <span class="block mt-1 mb-3 mr-10 font-thin text-gray-700">
-                during the last five times you attempted to apply
-                {{this.activeKnowledgeComponent.title}}.
-              </span>
-            </span>
-          </div>
+            </div>
+          {{/if}}
         {{else}}
-          <ProgressBar
-            @title="Progress"
-            @titleSuffix={{if
+          {{#if
+            (or
+              (gt
+                this.activeKnowledgeComponent.progress.personal.practicingLevel
+                0
+              )
+              (eq this.activeProgressType "topic-exposure")
               (eq this.activeProgressType "personal")
-              "(personal)"
-              "(class average)"
-            }}
-            @progress={{if
-              (eq this.activeProgressType "personal")
-              this.activeKnowledgeComponent.progress.personal.totalLevel
-              this.activeKnowledgeComponent.progress.group.totalLevel
-            }}
-            @activeColor={{this.activeColor}}
-          />
+              (eq this.activeProgressType "group")
+            )
+          }}
+            <div class="mt-6">
+              <ProgressBar
+                @title={{if
+                  (eq this.activeProgressType "topic-exposure")
+                  "Topic underexposure"
+                  "Skill level"
+                }}
+                @titleSuffix={{if
+                  (eq this.activeProgressType "personal")
+                  "(personal)"
+                  (if (eq this.activeProgressType "group") "(class average)")
+                }}
+                @progress={{if
+                  (eq this.activeProgressType "personal")
+                  this.activeKnowledgeComponent.progress.personal.totalLevel
+                  (if
+                    (eq this.activeProgressType "group")
+                    this.activeKnowledgeComponent.progress.group.totalLevel
+                    (this.substract
+                      100
+                      this.activeKnowledgeComponent.progress.personal.practicingLevel
+                    )
+                  )
+                }}
+                @activeColor={{if
+                  (eq this.activeProgressType "topic-exposure")
+                  "red"
+                  this.activeColor
+                }}
+              />
+
+              {{#if (eq this.activeProgressType "topic-exposure")}}
+                <ProgressBar
+                  class="mt-8"
+                  @title="Topic exposure"
+                  @progress={{this.activeKnowledgeComponent.progress.personal.practicingLevel}}
+                  @activeColor="green"
+                />
+              {{/if}}
+            </div>
+          {{/if}}
         {{/if}}
       </div>
     </article>

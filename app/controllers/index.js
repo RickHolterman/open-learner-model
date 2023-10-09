@@ -15,6 +15,7 @@ const DEFAULT_SORT_TYPE = SORT_TYPE.ALPHABETICAL;
 const DEFAULT_PERSONAL_PROGRESS_ACTIVE = true;
 const DEFAULT_GROUP_PROGRESS_ACTIVE = false;
 const DEFAULT_BUGGY_ANSWERS_ACTIVE = false;
+const DEFAULT_TOPIC_EXPOSURE_ACTIVE = false;
 const DEFAULT_SIDE_PANEL_DETAILS_OPEN = ['progress'];
 const DEFAULT_USER_ID = 'medium-scoring';
 
@@ -34,6 +35,7 @@ export default class IndexController extends Controller {
   @tracked isPersonalProgressActive = DEFAULT_PERSONAL_PROGRESS_ACTIVE;
   @tracked isGroupProgressActive = DEFAULT_GROUP_PROGRESS_ACTIVE;
   @tracked isBuggyAnswersActive = DEFAULT_BUGGY_ANSWERS_ACTIVE;
+  @tracked isTopicExposureActive = DEFAULT_TOPIC_EXPOSURE_ACTIVE;
   @tracked sidePanelDetailsOpen = DEFAULT_SIDE_PANEL_DETAILS_OPEN;
 
   get selectedSortMethod() {
@@ -433,6 +435,7 @@ export default class IndexController extends Controller {
       isPersonalProgressActive: 'personal-progress',
       isGroupProgressActive: 'group-progress',
       isBuggyAnswersActive: 'buggy-answers',
+      isTopicExposureActive: 'topic-exposure',
       userId: 'user-id',
       selectedDateIndex: 'history',
     },
@@ -492,6 +495,7 @@ export default class IndexController extends Controller {
     this.isPersonalProgressActive = DEFAULT_PERSONAL_PROGRESS_ACTIVE;
     this.isGroupProgressActive = DEFAULT_GROUP_PROGRESS_ACTIVE;
     this.isBuggyAnswersActive = DEFAULT_BUGGY_ANSWERS_ACTIVE;
+    this.isTopicExposureActive = DEFAULT_TOPIC_EXPOSURE_ACTIVE;
   }
 
   @action
@@ -509,12 +513,18 @@ export default class IndexController extends Controller {
     this.isBuggyAnswersActive = !this.isBuggyAnswersActive;
   }
 
+  @action
+  toggleTopicExposureActive() {
+    this.isTopicExposureActive = !this.isTopicExposureActive;
+  }
+
   get hasActiveFilters() {
     return (
       this.selectedSortType !== DEFAULT_SORT_TYPE ||
       this.isPersonalProgressActive !== DEFAULT_PERSONAL_PROGRESS_ACTIVE ||
       this.isGroupProgressActive !== DEFAULT_GROUP_PROGRESS_ACTIVE ||
-      this.isBuggyAnswersActive !== DEFAULT_BUGGY_ANSWERS_ACTIVE
+      this.isBuggyAnswersActive !== DEFAULT_BUGGY_ANSWERS_ACTIVE ||
+      this.isTopicExposureActive !== DEFAULT_TOPIC_EXPOSURE_ACTIVE
     );
   }
 

@@ -30,18 +30,45 @@
       </div>
     </button>
 
-    <h2 class="relative pb-6 text-2xl">
-      {{@activeKnowledgeComponent.title}}
-    </h2>
+    <div class="flex flex-col gap-4 pb-10">
+      <div class="flex items-center justify-between">
+        <h2 class="relative text-2xl">
+          {{@activeKnowledgeComponent.title}}
+        </h2>
 
-    {{#if @activeKnowledgeComponent.description}}
-      <div class="pb-6 mb-4 mr-10 -mt-2 text-sm font-thin text-gray-700">
-        {{@activeKnowledgeComponent.description}}
+        {{#if
+          (eq @activeKnowledgeComponent.progress.personal.practicingLevel 0)
+        }}
+          <div
+            class="flex justify-end text-sm leading-normal font-light rounded-lg px-2 py-0.5 transition-colors max-w-max flex-shrink-0 bg-yellow-500 text-white"
+          >
+            Unstarted topic
+          </div>
+        {{/if}}
       </div>
-    {{/if}}
+
+      {{#if
+        (or
+          @activeKnowledgeComponent.description
+          (eq @activeKnowledgeComponent.progress.personal.practicingLevel 0)
+        )
+      }}
+        <div class="text-base text-gray-700 text-medium">
+          {{@activeKnowledgeComponent.description}}
+          {{#if
+            (eq @activeKnowledgeComponent.progress.personal.practicingLevel 0)
+          }}
+            Note that this is an unstarted topic. This means you have not been
+            exposed to situations that required you to apply
+            {{@activeKnowledgeComponent.title}}
+            yet.
+          {{/if}}
+        </div>
+      {{/if}}
+    </div>
 
     <div class="flex-1 overflow-scroll">
-      <div class="flex flex-col gap-6 pb-10 mt-10 min-h-max">
+      <div class="flex flex-col gap-6 pb-10 min-h-max">
         <details class="group" data-section-type="progress">
           <summary
             class="flex items-center justify-between pb-6 overflow-hidden border-b border-white cursor-pointer group-open:border-none group-open:pb-0"
@@ -55,7 +82,7 @@
           </summary>
           <div class="px-6 py-8 mt-4 mb-4 bg-white rounded-md bg-opacity-60">
             <ProgressBar
-              @title="Personal progress"
+              @title="Personal skill level"
               @progress={{@activeKnowledgeComponent.progress.personal.totalLevel}}
               @activeColor="green"
             />
@@ -84,19 +111,13 @@
           <div class="px-6 py-8 mt-4 mb-4 bg-white rounded-md bg-opacity-60">
             <ProgressBar
               @title="Answering correctly"
-              @titleSuffix={{concat
-                "(last "
-                @activeKnowledgeComponent.interactionsCap
-                " attempts)"
-              }}
               @subtitle={{this.answeringCorrectlyMessage}}
               @progress={{@activeKnowledgeComponent.progress.personal.answeringCorrectlyLevel}}
               @activeColor="green"
             />
 
             <ProgressBar
-              @title="Hints used"
-              @titleSuffix="(last 5 attempts)"
+              @title="Recent hint usage"
               @subtitle={{this.requestedHintsMessage}}
               @progress={{@activeKnowledgeComponent.progress.personal.requestedHintsLevel}}
               @activeColor="green"
@@ -171,32 +192,56 @@
           </summary>
 
           <span
-            class="flex flex-col mt-4 mb-4 mr-10 text-sm font-thin text-gray-700"
+            class="flex flex-col mt-4 mb-4 mr-20 text-sm font-thin leading-normal text-gray-700"
           >
             <span class="inline">
-              You made
-              <div
-                class="inline-block font-light rounded-lg px-2 py-0.5 transition-colors
-                  {{if
+              {{#if
+                (eq
+                  @activeKnowledgeComponent.progress.personal.practicingLevel 0
+                )
+              }}
+                You have not been exposed to situations that required you to
+                apply
+                {{@activeKnowledgeComponent.title}}
+                yet.
+              {{else}}
+
+                You made
+                <div
+                  class="inline-flex leading-5 font-light rounded-lg px-2 -my-0.5 py-0.5 transition-colors text-sm
+                    {{if
+                      (eq
+                        @activeKnowledgeComponent.progress.personal.buggyAnswersAmount
+                        0
+                      )
+                      'bg-green-500 text-white'
+                      'bg-red-400 text-white'
+                    }}"
+                >
+                  {{@activeKnowledgeComponent.progress.personal.buggyAnswersAmount}}
+                  mistake{{#unless
                     (eq
                       @activeKnowledgeComponent.progress.personal.buggyAnswersAmount
-                      0
+                      1
                     )
-                    'bg-green-500 text-white'
-                    'bg-red-400 text-white'
-                  }}"
-              >
-                {{@activeKnowledgeComponent.progress.personal.buggyAnswersAmount}}
-                mistake{{#unless
-                  (eq
-                    @activeKnowledgeComponent.progress.personal.buggyAnswersAmount
-                    1
+                  }}s{{/unless}}
+                </div>
+                {{#if
+                  (lt
+                    @activeKnowledgeComponent.progress.totalDiagnoseInteractions
+                    @activeKnowledgeComponent.interactionsCap
                   )
-                }}s{{/unless}}
-              </div>
-              {{"  "}}
-              during the last five times you attempted to apply
-              {{@activeKnowledgeComponent.title}}.
+                }}
+                  during your total of
+                  {{@activeKnowledgeComponent.progress.totalDiagnoseInteractions}}
+                  attempts to apply
+                  {{@activeKnowledgeComponent.title}}.
+                {{else}}
+                  during the last five times you attempted to apply
+                  {{@activeKnowledgeComponent.title}}.
+                {{/if}}
+              {{/if}}
+
               {{#if
                 (eq
                   @activeKnowledgeComponent.progress.personal.buggyAnswersAmount
@@ -210,7 +255,7 @@
 
           {{#each @activeKnowledgeComponent.errors as |error index|}}
             <div
-              class="relative flex flex-col gap-6 px-6 py-8 mt-8 text-sm font-medium bg-white rounded-md bg-opacity-60"
+              class="relative flex flex-col gap-6 px-6 py-8 mt-8 text-sm font-medium leading-5 bg-white rounded-md bg-opacity-60"
             >
               <div
                 class="max-w-max absolute right-4 font-normal top-0 rounded-lg px-2 py-0.5 -translate-y-3 transition-colors bg-gray-100 shadow-sm text-gray-600"
@@ -268,7 +313,7 @@
                 </span>
               {{else}}
                 {{log @activeKnowledgeComponent}}
-                <div class="mr-5 text-sm font-thin text-gray-700">
+                <div class="mr-5 text-sm font-thin leading-5 text-gray-700">
                   This is not a correct application of
                   {{error.rule}}, and the two formulas are not equivalent. Can
                   you think of an alternative for rewriting the initial formula?

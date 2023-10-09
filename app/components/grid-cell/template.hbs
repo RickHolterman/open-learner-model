@@ -14,9 +14,11 @@
     <div
       class="absolute top-0 left-0 z-10 w-full h-full bg-opacity-95
         {{if
-          (and (eq @progressType 'mistakes') (eq @progress 0))
+          (and
+            (eq @progressType 'mistakes') (eq @progress 0) (not @isUnstarted)
+          )
           'bg-green-500'
-          @backgroundColor
+          (if @isUnstarted '' @backgroundColor)
         }}"
       style="{{concat
         'opacity: '
@@ -26,12 +28,17 @@
     >
     </div>
     <div
-      class="relative z-20 transition-all duration-200 group-hover:opacity-0"
+      class="relative z-20 transition-all duration-200 group-hover:opacity-0
+        {{if @isUnstarted 'text-gray-700/30 font-medium'}}"
     >
-      {{#if (or @label (eq @label 0))}}
-        {{@label}}
+      {{#if @isUnstarted}}
+        N/A
       {{else}}
-        {{@progress}}%
+        {{#if (or @label (eq @label 0))}}
+          {{@label}}
+        {{else}}
+          {{@progress}}%
+        {{/if}}
       {{/if}}
     </div>
     <div

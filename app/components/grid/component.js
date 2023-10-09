@@ -7,11 +7,13 @@ const PROGRESS_TYPE = {
   PERSONAL: 'personal',
   GROUP: 'group',
   MISTAKES: 'mistakes',
+  TOPIC_EXPOSURE: 'topic-exposure',
 };
 
 const COLOR_MAPPING = {
   [PROGRESS_TYPE.PERSONAL]: 'green',
   [PROGRESS_TYPE.GROUP]: 'blue',
+  [PROGRESS_TYPE.TOPIC_EXPOSURE]: 'yellow',
 };
 
 export default class GridComponent extends Component {
@@ -100,4 +102,6 @@ export default class GridComponent extends Component {
   }
 
   calculateProgress = (options) => (options.part / options.whole) * 100;
+
+  substract = (x, y) => x - y;
 }
