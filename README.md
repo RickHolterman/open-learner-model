@@ -2,6 +2,8 @@
 
 REASON is an Open Learner Model (OLM) which visualizations are based on ITS interactions with the logic tutor LogEx. It supports features such as comparison to peers (class average), displaying details on demand (sorting and filtering knowledge components, toggling additional information), viewing your own previous mistakes, and tracking historical progress by navigating to different points in time.
 
+A live demo is available [here](https://rickholterman.github.io/open-learner-model).
+
 ## Prerequisites
 
 You will need the following things properly installed on your computer.
