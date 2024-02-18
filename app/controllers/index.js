@@ -88,7 +88,7 @@ export default class IndexController extends Controller {
       }
 
       let year = time.getFullYear();
-      let month = time.getMonth();
+      let month = time.getMonth() + 1;
       let day = time.getDate();
       let hours = time.getHours();
       let minutes = time.getMinutes();
@@ -126,7 +126,13 @@ export default class IndexController extends Controller {
   @action drawHistoricalData(canvas) {
     const ctx = canvas.getContext('2d');
     const offsetY = 18;
+    const canvasContainer = document.querySelector(
+      '#js-historic-progress-section'
+    );
     const dataPoints = document.querySelectorAll('.js-data-point');
+    const canvasWidth = Math.min(canvasContainer.clientWidth - 96, 1120);
+
+    canvas.width = canvasWidth;
 
     ctx.beginPath();
     ctx.strokeStyle = '#22c55e';
