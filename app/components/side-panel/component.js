@@ -11,27 +11,24 @@ export default class SidePanelComponent extends Component {
     return this.args.activeKnowledgeComponent;
   }
 
-  get anweringCorrectlyMessage() {
+  get answeringCorrectlyMessage() {
     if (isEmpty(this.topic) === true) {
       return '';
     }
 
     if (this.topic.progress.personal.practicingLevel === 0) {
-      return `You haven't anwered any ${this.topic.title} related questions yet. Provide correct answers in situations that require applying this rule to improve your score.`;
+      return `You haven't answered any ${this.topic.title} related questions yet. Provide correct answers in situations that require applying this rule to improve your score.`;
     }
 
     return `You provided the correct answer
       ${this.topic.progress.personal.answeringCorrectlyAmount}
-      out of
-      ${this.topic.progress.totalDiagnoseInteractions}
       ${this.timesStringPluralized}
-      ${
-        this.topic.interactionsCap >=
-        this.topic.progress.totalDiagnoseInteractions
-          ? ' in total, '
-          : ` during your last ${this.topic.interactionsCap} attempts, `
-      }
-      in situations where you needed to apply
+      out of your ${
+        this.topic.progress.totalDiagnoseInteractions <
+        this.topic.interactionsCap
+          ? 'total of'
+          : 'last'
+      } ${this.topic.progress.totalDiagnoseInteractions} attempts to apply
       ${this.topic.title}.
       `;
   }
@@ -73,8 +70,8 @@ export default class SidePanelComponent extends Component {
       this.topic.progress.totalDiagnoseInteractions > 0 &&
       this.topic.progress.personal.requestedHintsAmount === 0
     ) {
-      message = `You haven't requested any hints in situations where you needed to apply
-      ${this.topic.title} in your last attempts. `;
+      message = `You haven't recently requested any hints in situations where you needed to apply
+      ${this.topic.title}. `;
     }
     if (
       this.topic.progress.totalDiagnoseInteractions === 0 &&
@@ -83,18 +80,13 @@ export default class SidePanelComponent extends Component {
       return `Try not using any hints in situations where you need to apply ${this.topic.title} to improve your score. Your score will update as you practice with ${this.topic.title} more. `;
     }
 
-    if (this.topic.progress.personal.requestedHintsAmount === 0) {
-      message = `You haven't requested any hints in situations where you needed to apply
-      ${this.topic.title}. `;
-    }
-
     if (
       this.topic.progress.personal.requestedHintsLevel === 100 &&
       this.topic.progress.totalDiagnoseInteractions >=
         this.topic.interactionsCap
     ) {
       message +=
-        'Maintain your score by anwering questions without using hints. ';
+        'Maintain your score by answering questions without using hints. ';
     }
     if (this.topic.progress.personal.requestedHintsLevel !== 100) {
       message += 'Use less hints to improve your score.';
@@ -106,7 +98,7 @@ export default class SidePanelComponent extends Component {
   get timesStringPluralized() {
     return `${pluralize(
       'time',
-      this.topic.progress.totalDiagnoseInteractions
+      this.topic.progress.personal.answeringCorrectlyAmount
     )}`;
   }
 

@@ -1,59 +1,240 @@
-<main>
-  <div class="max-w-screen-xl pt-20 mx-auto">
+<div class="flex h-full" {{did-insert this.setupPage}}>
+  {{#if this.data}}
+    <main
+      class="transition-colors duration-500 flex-1 min-h-screen
+        {{if this.isShowingHistoricData 'bg-orange-50' 'bg-slate-100'}}"
+    >
+      <div class="flex flex-col justify-between max-w-screen-xl pt-20 mx-auto">
 
-    <header class="relative z-20">
-      <div class="flex items-center justify-between px-8">
-        <h1 class="text-2xl">Progress - LogEx</h1>
-        <button
-          type="button"
-          class="relative z-20 flex items-center gap-3 py-2 pl-5 pr-3.5 text-sm font-medium text-white rounded-full bg-slate-700 text"
-          {{on "click" this.toggleFiltersIsActive}}
-        >
-          Filters
+        <header class="relative z-30">
+          <div class="flex items-start justify-between px-8">
 
-          {{! Filter icon. }}
-          <div class="flex flex-col gap-1 origin-center scale-90">
-            <div class="w-4 h-[3px] bg-white"></div>
-            <div class="w-3 h-[3px] bg-white"></div>
-            <div class="w-2 h-[3px] bg-white"></div>
+            <div class="flex flex-col gap-4">
+              <h1 class="text-2xl">Progress - LogEx</h1>
+
+              <ProgressBlock
+                @progress={{this.data.learnerData.currentUserTotalLevel}}
+                @date={{if
+                  (eq
+                    this.selectedDate (get this.dates this.maxSelectedDateIndex)
+                  )
+                  ""
+                  (this.formatDate this.selectedDate)
+                }}
+              />
+            </div>
+
+            <button
+              type="button"
+              class="relative z-20 flex items-center gap-3 py-2 pl-5 pr-3.5 text-sm leading-normal font-medium text-white rounded-full bg-slate-700 text"
+              {{on "click" this.toggleFiltersIsActive}}
+            >
+              Filters
+
+              {{! Filter icon. }}
+              <div class="flex flex-col gap-1 origin-center scale-90">
+                <div class="w-4 h-[3px] bg-white"></div>
+                <div class="w-3 h-[3px] bg-white"></div>
+                <div class="w-2 h-[3px] bg-white"></div>
+              </div>
+            </button>
+            <Filters
+              @isActive={{this.isFiltersActive}}
+              @toggleIsActive={{this.toggleFiltersIsActive}}
+              @changeSortOptions={{this.changeSortOptions}}
+              @selectedSortType={{this.selectedSortType}}
+              @hasActiveFilters={{this.hasActiveFilters}}
+              @togglePersonalProgressActive={{this.togglePersonalProgressActive}}
+              @isPersonalProgressActive={{this.isPersonalProgressActive}}
+              @toggleGroupProgressActive={{this.toggleGroupProgressActive}}
+              @isGroupProgressActive={{this.isGroupProgressActive}}
+              @toggleBuggyAnswersActive={{this.toggleBuggyAnswersActive}}
+              @isBuggyAnswersActive={{this.isBuggyAnswersActive}}
+              @isTopicExposureActive={{this.isTopicExposureActive}}
+              @toggleTopicExposureActive={{this.toggleTopicExposureActive}}
+              @reset={{this.resetFilters}}
+            />
           </div>
-        </button>
-        <Filters
-          @isActive={{this.isFiltersActive}}
-          @toggleIsActive={{this.toggleFiltersIsActive}}
-          @changeSortOptions={{this.changeSortOptions}}
-          @selectedSortType={{this.selectedSortType}}
-          @hasActiveFilters={{this.hasActiveFilters}}
-          @togglePersonalProgressActive={{this.togglePersonalProgressActive}}
-          @isPersonalProgressActive={{this.isPersonalProgressActive}}
-          @toggleGroupProgressActive={{this.toggleGroupProgressActive}}
-          @isGroupProgressActive={{this.isGroupProgressActive}}
-          @toggleBuggyAnswersActive={{this.toggleBuggyAnswersActive}}
-          @isBuggyAnswersActive={{this.isBuggyAnswersActive}}
-          @reset={{this.resetFilters}}
-        />
+        </header>
+
+        {{! <div id='graph-view-canvas' class='fixed top-0 left-0'></div> }}
+
+        <div class="px-8 overflow-x-auto min-h-[380px] flex items-center mb-10">
+          <Grid
+            @topics={{this.topics}}
+            @isSidePanelOpen={{this.isSidePanelActive}}
+            @openSidePanel={{this.openSidePanel}}
+            @closeSidePanel={{this.closeSidePanel}}
+            @isPersonalProgressActive={{this.isPersonalProgressActive}}
+            @isGroupProgressActive={{this.isGroupProgressActive}}
+            @isBuggyAnswersActive={{this.isBuggyAnswersActive}}
+            @isTopicExposureActive={{this.isTopicExposureActive}}
+          />
+        </div>
+
+        <footer class="flex flex-col gap-2 px-8 pt-10 pb-20">
+          <div
+            class="flex flex-col gap-2 px-12 pt-10 pb-20 rounded-md shadow-sm bg-slate-900 bg-opacity-5 group/progress-section"
+          >
+            <div class="flex items-center justify-between pr-2.5">
+              <label for="time" class="px-2.5">Your progress over time</label>
+              <button
+                type="button"
+                class="text-sm leading-normal font-medium text-red-700 underline transition-opacity duration-200
+                  {{if
+                    (eq
+                      this.selectedDate
+                      (get this.dates this.maxSelectedDateIndex)
+                    )
+                    'opacity-0 pointer-events-none'
+                    'opacity-1'
+                  }}"
+                {{on "click" this.onResetTimelineClick}}
+              >
+                reset to latest
+              </button>
+            </div>
+
+            <div
+              class="relative flex justify-between w-full h-32 mt-8 -mb-5 px-2.5"
+            >
+              <div
+                class="absolute top-0 left-0 mx-2.5 w-[calc(100%_-_1.25rem)] h-full z-0 bg-gradient-to-t from-slate-900/5 to-transparent"
+              >
+              </div>
+
+              <div class="px-2.5 w-full absolute top-0 left-0 z-0">
+                <div
+                  class="absolute top-0 left-0 text-xs -translate-x-8 -translate-y-1/2 text-slate-500"
+                >
+                  100%
+                </div>
+                <div class="w-px h-32 bg-slate-900 bg-opacity-10"></div>
+              </div>
+
+              <div class="mx-2.5 w-full absolute top-0 right-0 z-0">
+                <div
+                  class="absolute w-px h-32 -right-px bg-slate-900 bg-opacity-10"
+                ></div>
+              </div>
+
+              <div class="px-2.5 w-full absolute bottom-0 left-0">
+                <div
+                  class="absolute top-0 left-0 text-xs -translate-x-5 -translate-y-1/2 text-slate-500"
+                >
+                  0%
+                </div>
+                <div class="w-full h-px bg-orange-400"></div>
+              </div>
+
+              <canvas
+                width="1120"
+                height="148"
+                class="absolute w-full h-[calc(100%_+_20px)] -mx-2.5 -my-2.5 z-10"
+                {{did-insert this.drawHistoricalData}}
+              ></canvas>
+
+              <div class="px-2.5 w-full absolute bottom-0 left-0 z-0">
+                <div class="w-full h-px bg-orange-400">
+
+                </div>
+              </div>
+
+              {{#each this.historicData as |date index|}}
+                <div class="relative h-32 group">
+                  <div
+                    class="absolute bottom-0 z-0 w-px h-2 bg-orange-400"
+                  ></div>
+
+                  <div class="px-2.5 w-full absolute bottom-0 left-0">
+                    <div
+                      class="absolute w-20 text-xs text-right -rotate-45 -left-16 top-9 text-slate-500"
+                    >
+                      <div class="hidden font-medium group-last:block">
+                        Today
+                      </div>
+                      <div
+                        class="group-last:hidden
+                          {{if (eq (mod index 5) 0) '' 'hidden'}}"
+                      >
+                        {{this.formatDate (get this.dates index)}}
+                      </div>
+                    </div>
+                    <div class="w-px h-full bg-orange-400"></div>
+                  </div>
+
+                  <div
+                    class="absolute z-10 w-2 h-2 -translate-x-1/2 translate-y-1/2 bg-transparent rounded-full js-data-point"
+                    style={{concat
+                      "bottom: "
+                      date.learnerData.currentUserTotalLevel
+                      "%"
+                    }}
+                  >
+                    <div
+                      class="w-3 h-3 bg-green-600 rounded-full shadow-sm -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 absolute
+                        {{if
+                          (eq (concat this.selectedDateIndex) (concat index))
+                          'opacity-100'
+                          'opacity-0'
+                        }}"
+                    >
+                    </div>
+
+                    <div
+                      class="flex items-center absolute py-1 text-sm leading-normal font-medium pr-1 text-white rounded-lg shadow-sm bg-opacity-60 bg-orange-400 backdrop-blur-lg left-1/2 -translate-x-1/2 mb-5
+                        {{if
+                          (eq (concat this.selectedDateIndex) (concat index))
+                          'opacity-0 group-hover/progress-section:opacity-100'
+                          'opacity-0'
+                        }}"
+                      style={{concat
+                        "bottom: "
+                        date.learnerData.currentUserTotalLevel
+                        "%"
+                      }}
+                    >
+                      <div
+                        class="flex items-center justify-center flex-1 pl-3 pr-2 whitespace-nowrap"
+                      >
+                        {{this.formatDate this.selectedDate}}
+                      </div>
+
+                      <div
+                        class="flex justify-end text-xs py-0.5 rounded-md px-2 transition-colors
+                          {{if
+                            (eq @progress 100)
+                            'bg-green-500 text-white font-medium'
+                            'bg-slate-900 bg-opacity-60 text-white font-medium'
+                          }}"
+                      >{{this.data.learnerData.currentUserTotalLevel}}%</div>
+                    </div>
+                  </div>
+                </div>
+              {{/each}}
+            </div>
+            <input
+              class="relative z-20"
+              type="range"
+              id="time"
+              name="time"
+              min="0"
+              max={{this.maxSelectedDateIndex}}
+              value={{this.selectedDateIndex}}
+              {{on "input" this.handleProgressSliderInput}}
+              {{!-- {{on "change" this.handleProgressSliderChange}} --}}
+            />
+          </div>
+        </footer>
+
       </div>
-    </header>
+    </main>
 
-    {{! <div id='graph-view-canvas' class='fixed top-0 left-0'></div> }}
-
-    <div class="px-8 mt-12 overflow-x-auto">
-      <Grid
-        @topics={{this.topics}}
-        @isSidePanelOpen={{this.isSidePanelActive}}
-        @openSidePanel={{this.openSidePanel}}
-        @closeSidePanel={{this.closeSidePanel}}
-        @isPersonalProgressActive={{this.isPersonalProgressActive}}
-        @isGroupProgressActive={{this.isGroupProgressActive}}
-        @isBuggyAnswersActive={{this.isBuggyAnswersActive}}
-      />
-    </div>
-  </div>
-</main>
-
-<SidePanel
-  @isActive={{this.isSidePanelActive}}
-  @closeSidePanel={{this.closeSidePanel}}
-  @activeKnowledgeComponent={{this.activeKnowledgeComponent}}
-  @detailsOpen={{this.sidePanelDetailsOpen}}
-/>
+    <SidePanel
+      @isActive={{this.isSidePanelActive}}
+      @closeSidePanel={{this.closeSidePanel}}
+      @activeKnowledgeComponent={{this.activeKnowledgeComponent}}
+      @detailsOpen={{this.sidePanelDetailsOpen}}
+    />
+  {{/if}}
+</div>

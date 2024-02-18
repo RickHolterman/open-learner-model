@@ -1,5 +1,5 @@
 <div
-  class="absolute z-10 backdrop-blur-3xl p-8 pb-9 transition-all origin-top-right bg-white rounded-lg shadow-xl w-[350px] top-12 right-8 h-max bg-opacity-5
+  class="absolute z-10 backdrop-blur-3xl p-8 pb-9 transition-all origin-top-right bg-white rounded-lg shadow-xl w-[350px] top-12 right-8 h-max bg-opacity-40
     {{if
       @isActive
       'opacity-100 translate-y-0 scale-100 duration-200'
@@ -11,7 +11,7 @@
 
     <button
       type="button"
-      class="text-sm font-medium text-red-700 underline transition-opacity duration-200
+      class="text-sm leading-normal font-medium text-red-700 underline transition-opacity duration-200
         {{if @hasActiveFilters 'opacity-1' 'opacity-0 pointer-events-none'}}"
       {{on "click" this.onResetClick}}
     >reset defaults</button>
@@ -22,10 +22,10 @@
       <div class="flex flex-col gap-0.5">
         <div
           class="flex items-center text-xs font-medium leading-tight text-gray-700"
-        >Personal progress</div>
+        >Personal skill level</div>
         <div
           class="flex items-center text-xs font-light leading-tight text-gray-700"
-        >Show your personal progress in the overview.</div>
+        >Show your personal skill level in the grid overview.</div>
       </div>
 
       <button
@@ -52,7 +52,8 @@
         >Class average</div>
         <div
           class="flex items-center text-xs font-light leading-tight text-gray-700"
-        >Show your class' average progress in the overview to allow comparison.</div>
+        >Show your class' average skill level in the overview to allow
+          comparison.</div>
       </div>
       <button
         type="button"
@@ -75,12 +76,12 @@
       <div class="flex flex-col gap-0.5">
         <div
           class="flex items-center text-xs font-medium leading-tight text-gray-700"
-        >Errors last 5 attempts</div>
+        >Recent errors</div>
         <div
           class="flex items-center text-xs font-light leading-tight text-gray-700"
         >
-          Show how many mistakes you made in each topic for your last five
-          attempts.
+          Show how many mistakes you made in your recent attempts to apply a
+          rule.
         </div>
       </div>
       <button
@@ -95,6 +96,45 @@
         ></div>
       </button>
     </div>
+
+    <div class="flex items-center justify-between gap-8">
+      <div class="flex flex-col gap-0.5">
+        <div
+          class="flex items-center text-xs font-medium leading-tight text-gray-700"
+        >Topic underexposure</div>
+        <div
+          class="flex items-center text-xs font-light leading-tight text-gray-700"
+        >
+          Show your level of underexposure to exercises that require you to
+          apply a rule.
+        </div>
+      </div>
+      <button
+        type="button"
+        class="flex flex-shrink-0 items-center w-12 px-2 rounded-full h-7 transition-colors duration-300 ease-in-out
+          {{if @isTopicExposureActive 'bg-yellow-400' 'bg-slate-200'}}"
+        {{on "click" this.toggleTopicExposureActive}}
+      >
+        <div
+          class="w-4 h-4 bg-white rounded-full transition-transform duration-300 ease-in-out
+            {{if @isTopicExposureActive 'translate-x-4' ''}}"
+        ></div>
+      </button>
+    </div>
+
+    <span class="flex gap-1.5 -mt-2 text-xs italic font-light">
+      <div>
+        <div
+          class="flex content-center justify-center w-4 h-4 not-italic font-bold text-white bg-yellow-500 rounded-full"
+        >
+          i
+        </div>
+      </div>
+      A high underexposure score indicates you haven't been given enough
+      opportunities to prove your proficiency, which negatively affects your
+      knowlegde score. Practice more with topics with a high underexposure score
+      to allow reaching a 100% personal skill level.
+    </span>
 
     <div class="flex flex-col gap-2">
       <div

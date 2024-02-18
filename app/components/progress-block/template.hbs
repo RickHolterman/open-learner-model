@@ -1,0 +1,14 @@
+<div class="relative">
+  <div
+    class="px-6 py-6 rounded-md shadow-sm bg-slate-900 bg-opacity-5 backdrop-blur-3xl w-96"
+  >
+    <ProgressBar
+      @title="Your total skill level"
+      @progress={{@progress}}
+      @titleSuffix={{if @date (concat "(on " @date ")")}}
+      @activeColor="green"
+      @useTransition={{false}}
+      @variant="light"
+    />
+  </div>
+</div>

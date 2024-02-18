@@ -1,73 +1,63 @@
-import { RULES } from './rules';
+import { RULES, RULE_NAMES } from './rules';
 
 const KNOWLEDGE_COMPONENTS = [
   {
-    title: 'Associativity',
+    title: RULE_NAMES.ASSOCIATIVITY,
     rules: RULES.ASSOCIATIVITY,
   },
   {
-    title: 'Absorption',
+    title: RULE_NAMES.ABSORPTION,
     rules: RULES.ABSORPTION,
   },
   {
-    title: 'Commutativity',
+    title: RULE_NAMES.COMMUTATIVITY,
     rules: RULES.COMMUTATIVITY,
   },
   {
-    title: 'De Morgan',
+    title: RULE_NAMES.DE_MORGAN,
     rules: RULES.DE_MORGAN,
   },
   {
-    title: 'Distribution',
+    title: RULE_NAMES.DISTRIBUTION,
     rules: RULES.DISTRIBUTION,
   },
   {
-    title: 'Double Negation',
+    title: RULE_NAMES.DOUBLE_NEGATION,
     rules: RULES.DOUBLE_NEGATION,
   },
   {
-    title: 'Equivalence definition',
+    title: RULE_NAMES.EQUIVALENCE_DEFINITION,
     rules: RULES.EQUIVALENCE_DEFINITION,
   },
   {
-    title: 'F-rule complement',
-    rules: RULES.F_RULE_COMPLEMENT,
+    title: RULE_NAMES.F_RULES,
+    description:
+      'The F-rules include: F-rule complement, F-rule conjunction, F-rule disjunction, and F-rule not T.',
+    rules: [
+      ...RULES.F_RULE_COMPLEMENT,
+      ...RULES.F_RULE_CONJUNCTION,
+      ...RULES.F_RULE_DISJUNCTION,
+      ...RULES.F_RULE_NOT_T,
+    ],
   },
   {
-    title: 'F-rule conjunction',
-    rules: RULES.F_RULE_CONJUNCTION,
-  },
-  {
-    title: 'F-rule disjunction',
-    rules: RULES.F_RULE_DISJUNCTION,
-  },
-  {
-    title: 'F-rule not T',
-    rules: RULES.F_RULE_NOT_T,
-  },
-  {
-    title: 'Idempotency',
+    title: RULE_NAMES.IDEMPOTENCY,
     rules: RULES.IDEMPOTENCY,
   },
   {
-    title: 'Implication definition',
+    title: RULE_NAMES.IMPLICATION_DEFINITION,
     rules: RULES.IMPLICATION_DEFINITION,
   },
   {
-    title: 'T-rule complement',
-    rules: RULES.T_RULE_COMPLEMENT,
-  },
-  {
-    title: 'T-rule conjunction',
-    rules: RULES.T_RULE_CONJUNCTION,
-  },
-  {
-    title: 'T-rule disjunction',
-    rules: RULES.T_RULE_DISJUNCTION,
-  },
-  {
-    title: 'T-rule not F',
-    rules: RULES.T_RULE_NOT_F,
+    title: RULE_NAMES.T_RULES,
+    description:
+      'The T-rules include: T-rule complement, T-rule conjunction, T-rule disjunction, and T-rule not F.',
+    rules: [
+      ...RULES.T_RULE_COMPLEMENT,
+      ...RULES.T_RULE_CONJUNCTION,
+      ...RULES.T_RULE_DISJUNCTION,
+      ...RULES.T_RULE_NOT_F,
+    ],
   },
 ];
 
